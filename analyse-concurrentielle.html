@@ -1,0 +1,2443 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Concurrentielle — Casbah Amor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========================================
+           CSS RESET & BASE
+           ======================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-section: #111111;
+            --bg-card: #1a1a1a;
+            --bg-card-hover: #222222;
+            --emerald: #1B5E3B;
+            --emerald-light: #2E8B57;
+            --emerald-glow: rgba(27, 94, 59, 0.3);
+            --gold: #B8860B;
+            --gold-light: #D4AF37;
+            --gold-dark: #8B6914;
+            --gold-glow: rgba(184, 134, 11, 0.25);
+            --sand: #F5EFE6;
+            --sand-muted: rgba(245, 239, 230, 0.7);
+            --sand-dim: rgba(245, 239, 230, 0.4);
+            --white: #FFFFFF;
+            --red: #C0392B;
+            --red-bg: rgba(192, 57, 43, 0.12);
+            --blue: #2980B9;
+            --blue-bg: rgba(41, 128, 185, 0.12);
+            --orange: #E67E22;
+            --orange-bg: rgba(230, 126, 34, 0.12);
+            --green-bg: rgba(27, 94, 59, 0.12);
+            --font-heading: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Montserrat', -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-dark);
+            color: var(--sand);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ========================================
+           NOISE TEXTURE OVERLAY
+           ======================================== */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        /* ========================================
+           PROGRESS BAR
+           ======================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--emerald), var(--gold-light), var(--emerald-light));
+            z-index: 10000;
+            transition: width 0.1s linear;
+        }
+
+        /* ========================================
+           NAVIGATION
+           ======================================== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            padding: 0.8rem 2rem;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(184, 134, 11, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            padding: 0.5rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+        }
+
+        .nav-brand {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--sand-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold-light);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ========================================
+           HERO SECTION
+           ======================================== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(27, 94, 59, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(184, 134, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(27, 94, 59, 0.08) 0%, transparent 60%),
+                var(--bg-dark);
+            animation: heroShift 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes heroShift {
+            0% {
+                background:
+                    radial-gradient(ellipse at 20% 50%, rgba(27, 94, 59, 0.15) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 20%, rgba(184, 134, 11, 0.1) 0%, transparent 50%),
+                    radial-gradient(ellipse at 50% 80%, rgba(27, 94, 59, 0.08) 0%, transparent 60%),
+                    var(--bg-dark);
+            }
+            33% {
+                background:
+                    radial-gradient(ellipse at 60% 30%, rgba(27, 94, 59, 0.18) 0%, transparent 60%),
+                    radial-gradient(ellipse at 20% 70%, rgba(184, 134, 11, 0.12) 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 60%, rgba(27, 94, 59, 0.06) 0%, transparent 60%),
+                    var(--bg-dark);
+            }
+            66% {
+                background:
+                    radial-gradient(ellipse at 40% 70%, rgba(184, 134, 11, 0.14) 0%, transparent 55%),
+                    radial-gradient(ellipse at 70% 30%, rgba(27, 94, 59, 0.16) 0%, transparent 55%),
+                    radial-gradient(ellipse at 30% 20%, rgba(184, 134, 11, 0.06) 0%, transparent 50%),
+                    var(--bg-dark);
+            }
+            100% {
+                background:
+                    radial-gradient(ellipse at 70% 60%, rgba(27, 94, 59, 0.14) 0%, transparent 60%),
+                    radial-gradient(ellipse at 30% 40%, rgba(184, 134, 11, 0.15) 0%, transparent 55%),
+                    radial-gradient(ellipse at 60% 10%, rgba(27, 94, 59, 0.1) 0%, transparent 55%),
+                    var(--bg-dark);
+            }
+        }
+
+        .hero-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--gold);
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 2rem;
+            background: rgba(184, 134, 11, 0.08);
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.15); }
+            50% { box-shadow: 0 0 20px 5px rgba(184, 134, 11, 0.08); }
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            text-wrap: balance;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .hero-line {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 1.5rem auto;
+        }
+
+        .hero p {
+            font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+            color: var(--sand-muted);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            text-wrap: pretty;
+        }
+
+        .hero-scroll {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--sand-dim);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .hero-scroll:hover {
+            color: var(--gold-light);
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+
+        /* ========================================
+           SECTIONS BASE
+           ======================================== */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-alt {
+            background: var(--bg-section);
+            max-width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .section-alt > .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--emerald-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            text-wrap: balance;
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--sand-dim);
+            font-weight: 300;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            text-wrap: pretty;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--emerald));
+            margin: 1rem 0 2.5rem;
+        }
+
+        /* ========================================
+           REVEAL ANIMATIONS
+           ======================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+        .reveal-delay-6 { transition-delay: 0.6s; }
+
+        /* ========================================
+           ID CARD — FICHE IDENTITE
+           ======================================== */
+        .id-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .id-card {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(17, 17, 17, 0.95));
+            border: 1px solid rgba(184, 134, 11, 0.12);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .id-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--emerald), var(--gold), var(--emerald));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .id-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(184, 134, 11, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px var(--gold-glow);
+        }
+
+        .id-card:hover::before {
+            opacity: 1;
+        }
+
+        .id-card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .id-card-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--sand-dim);
+            margin-bottom: 0.4rem;
+        }
+
+        .id-card-value {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.3;
+        }
+
+        .id-card-value .gold {
+            color: var(--gold-light);
+        }
+
+        .id-card-detail {
+            font-size: 0.8rem;
+            color: var(--sand-dim);
+            margin-top: 0.3rem;
+        }
+
+        .id-card-featured {
+            border-color: rgba(184, 134, 11, 0.3);
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.06), rgba(17, 17, 17, 0.95));
+        }
+
+        /* ========================================
+           PRESENCE DIGITALE
+           ======================================== */
+        .presence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        .presence-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(245, 239, 230, 0.06);
+            border-radius: 14px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .presence-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(184, 134, 11, 0.2);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .presence-card.active {
+            border-color: rgba(27, 94, 59, 0.35);
+            background: linear-gradient(135deg, rgba(27, 94, 59, 0.08), rgba(26, 26, 26, 0.9));
+        }
+
+        .presence-card.inactive {
+            border-color: rgba(192, 57, 43, 0.2);
+            background: linear-gradient(135deg, rgba(192, 57, 43, 0.04), rgba(26, 26, 26, 0.9));
+            opacity: 0.7;
+        }
+
+        .presence-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .presence-card.active .presence-icon {
+            background: rgba(27, 94, 59, 0.2);
+        }
+
+        .presence-card.inactive .presence-icon {
+            background: rgba(192, 57, 43, 0.15);
+        }
+
+        .presence-info {
+            flex: 1;
+        }
+
+        .presence-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--white);
+            margin-bottom: 0.15rem;
+        }
+
+        .presence-status {
+            font-size: 0.72rem;
+            color: var(--sand-dim);
+        }
+
+        .presence-card.active .presence-status {
+            color: var(--emerald-light);
+        }
+
+        .presence-card.inactive .presence-status {
+            color: var(--red);
+        }
+
+        /* ========================================
+           PRICE POSITIONING
+           ======================================== */
+        .price-chart {
+            margin: 3rem 0 2rem;
+        }
+
+        .price-segment {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.2rem;
+            position: relative;
+        }
+
+        .price-label {
+            width: 160px;
+            text-align: right;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--sand-muted);
+            flex-shrink: 0;
+        }
+
+        .price-bar-container {
+            flex: 1;
+            position: relative;
+            height: 44px;
+        }
+
+        .price-bar {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            width: 0;
+        }
+
+        .price-bar.animated {
+            transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .price-bar-budget {
+            background: linear-gradient(90deg, rgba(245, 239, 230, 0.08), rgba(245, 239, 230, 0.15));
+            border: 1px solid rgba(245, 239, 230, 0.1);
+        }
+
+        .price-bar-mid {
+            background: linear-gradient(90deg, rgba(245, 239, 230, 0.1), rgba(245, 239, 230, 0.2));
+            border: 1px solid rgba(245, 239, 230, 0.12);
+        }
+
+        .price-bar-premium {
+            background: linear-gradient(90deg, rgba(46, 139, 87, 0.2), rgba(46, 139, 87, 0.35));
+            border: 1px solid rgba(46, 139, 87, 0.25);
+        }
+
+        .price-bar-luxe {
+            background: linear-gradient(90deg, rgba(184, 134, 11, 0.2), rgba(212, 175, 55, 0.35));
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 30px var(--gold-glow), inset 0 0 20px rgba(184, 134, 11, 0.1);
+        }
+
+        .price-bar-ultra {
+            background: linear-gradient(90deg, rgba(245, 239, 230, 0.06), rgba(245, 239, 230, 0.12));
+            border: 1px solid rgba(245, 239, 230, 0.08);
+        }
+
+        .price-bar-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--sand);
+            white-space: nowrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .price-bar-luxe .price-bar-text {
+            color: var(--gold-light);
+        }
+
+        .casbah-marker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: 1rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(184, 134, 11, 0.2);
+            border: 1px solid var(--gold);
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--gold-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            animation: markerGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes markerGlow {
+            0% { box-shadow: 0 0 10px rgba(184, 134, 11, 0.2); }
+            100% { box-shadow: 0 0 25px rgba(184, 134, 11, 0.4); }
+        }
+
+        /* ========================================
+           COMPETITOR TABLE
+           ======================================== */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 16px;
+            border: 1px solid rgba(184, 134, 11, 0.12);
+            background: var(--bg-card);
+        }
+
+        .comp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .comp-table thead th {
+            padding: 1.2rem 1rem;
+            text-align: left;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--sand-dim);
+            background: rgba(17, 17, 17, 0.8);
+            border-bottom: 1px solid rgba(184, 134, 11, 0.15);
+            position: sticky;
+            top: 0;
+        }
+
+        .comp-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(245, 239, 230, 0.05);
+        }
+
+        .comp-table tbody tr:hover {
+            background: rgba(245, 239, 230, 0.03);
+        }
+
+        .comp-table tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            color: var(--sand-muted);
+        }
+
+        .comp-table .row-highlight {
+            background: linear-gradient(90deg, rgba(184, 134, 11, 0.08), rgba(184, 134, 11, 0.04));
+            border-left: 3px solid var(--gold);
+        }
+
+        .comp-table .row-highlight td {
+            color: var(--sand);
+            font-weight: 500;
+        }
+
+        .comp-table .row-highlight:hover {
+            background: linear-gradient(90deg, rgba(184, 134, 11, 0.12), rgba(184, 134, 11, 0.06));
+        }
+
+        .comp-table .row-rival {
+            background: linear-gradient(90deg, rgba(192, 57, 43, 0.06), rgba(192, 57, 43, 0.02));
+            border-left: 3px solid var(--red);
+        }
+
+        .comp-table .row-rival:hover {
+            background: linear-gradient(90deg, rgba(192, 57, 43, 0.1), rgba(192, 57, 43, 0.04));
+        }
+
+        .comp-table .riad-name {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .comp-table .row-highlight .riad-name {
+            color: var(--gold-light);
+        }
+
+        .comp-table .row-rival .riad-name {
+            color: var(--red);
+        }
+
+        .rival-tag {
+            display: inline-block;
+            padding: 0.15rem 0.45rem;
+            background: rgba(192, 57, 43, 0.15);
+            border: 1px solid rgba(192, 57, 43, 0.3);
+            border-radius: 6px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--red);
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .note-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .note-high {
+            background: rgba(27, 94, 59, 0.2);
+            color: var(--emerald-light);
+            border: 1px solid rgba(27, 94, 59, 0.3);
+        }
+
+        .note-medium {
+            background: rgba(245, 239, 230, 0.08);
+            color: var(--sand-muted);
+            border: 1px solid rgba(245, 239, 230, 0.1);
+        }
+
+        .note-gold {
+            background: rgba(184, 134, 11, 0.15);
+            color: var(--gold-light);
+            border: 1px solid rgba(184, 134, 11, 0.3);
+        }
+
+        .pool-check {
+            color: var(--emerald-light);
+        }
+
+        /* ========================================
+           CONFUSION ALERT
+           ======================================== */
+        .confusion-alert {
+            margin: 2.5rem 0 0;
+            padding: 1.8rem 2rem;
+            background: linear-gradient(135deg, rgba(192, 57, 43, 0.08), rgba(230, 126, 34, 0.06));
+            border: 1px solid rgba(192, 57, 43, 0.25);
+            border-left: 4px solid var(--red);
+            border-radius: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confusion-alert::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 100%;
+            background: radial-gradient(ellipse at right, rgba(192, 57, 43, 0.06), transparent);
+            pointer-events: none;
+        }
+
+        .confusion-alert-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--red);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .confusion-alert p {
+            font-size: 0.85rem;
+            color: var(--sand-muted);
+            line-height: 1.6;
+        }
+
+        .confusion-table {
+            margin-top: 1.2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .confusion-col {
+            padding: 1.2rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .confusion-col.us {
+            background: rgba(184, 134, 11, 0.08);
+            border: 1px solid rgba(184, 134, 11, 0.2);
+        }
+
+        .confusion-col.them {
+            background: rgba(192, 57, 43, 0.06);
+            border: 1px solid rgba(192, 57, 43, 0.2);
+        }
+
+        .confusion-col-title {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .confusion-col.us .confusion-col-title { color: var(--gold-light); }
+        .confusion-col.them .confusion-col-title { color: var(--red); }
+
+        .confusion-col ul {
+            list-style: none;
+            color: var(--sand-dim);
+            font-size: 0.78rem;
+        }
+
+        .confusion-col ul li {
+            padding: 0.2rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+
+        .confusion-col ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .confusion-col.us ul li::before { background: var(--gold); }
+        .confusion-col.them ul li::before { background: var(--red); }
+
+        /* ========================================
+           SWOT GRID
+           ======================================== */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .swot-card {
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .swot-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .swot-forces {
+            background: var(--green-bg);
+            border: 1px solid rgba(27, 94, 59, 0.25);
+        }
+
+        .swot-faiblesses {
+            background: var(--red-bg);
+            border: 1px solid rgba(192, 57, 43, 0.25);
+        }
+
+        .swot-opportunites {
+            background: var(--blue-bg);
+            border: 1px solid rgba(41, 128, 185, 0.25);
+        }
+
+        .swot-menaces {
+            background: var(--orange-bg);
+            border: 1px solid rgba(230, 126, 34, 0.25);
+        }
+
+        .swot-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .swot-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .swot-forces .swot-icon { background: rgba(27, 94, 59, 0.25); }
+        .swot-faiblesses .swot-icon { background: rgba(192, 57, 43, 0.25); }
+        .swot-opportunites .swot-icon { background: rgba(41, 128, 185, 0.25); }
+        .swot-menaces .swot-icon { background: rgba(230, 126, 34, 0.25); }
+
+        .swot-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .swot-forces .swot-title { color: var(--emerald-light); }
+        .swot-faiblesses .swot-title { color: var(--red); }
+        .swot-opportunites .swot-title { color: var(--blue); }
+        .swot-menaces .swot-title { color: var(--orange); }
+
+        .swot-list {
+            list-style: none;
+        }
+
+        .swot-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.2rem;
+            position: relative;
+            font-size: 0.85rem;
+            color: var(--sand-muted);
+            border-bottom: 1px solid rgba(245, 239, 230, 0.04);
+        }
+
+        .swot-list li:last-child { border-bottom: none; }
+
+        .swot-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .swot-forces .swot-list li::before { background: var(--emerald-light); }
+        .swot-faiblesses .swot-list li::before { background: var(--red); }
+        .swot-opportunites .swot-list li::before { background: var(--blue); }
+        .swot-menaces .swot-list li::before { background: var(--orange); }
+
+        /* ========================================
+           MARKET STATS — BIG COUNTERS
+           ======================================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+        }
+
+        .stat-item::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 20%;
+            height: 60%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(184, 134, 11, 0.2), transparent);
+        }
+
+        .stat-item:last-child::after {
+            display: none;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--gold-light);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            font-feature-settings: 'tnum' 1;
+        }
+
+        .stat-suffix {
+            font-size: 0.6em;
+            color: var(--emerald-light);
+            font-weight: 400;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--sand-dim);
+            font-weight: 400;
+        }
+
+        /* Seasonality Table */
+        .season-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            font-size: 0.85rem;
+        }
+
+        .season-table thead th {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--sand-dim);
+            border-bottom: 2px solid rgba(184, 134, 11, 0.2);
+        }
+
+        .season-table tbody td {
+            padding: 1rem;
+            color: var(--sand-muted);
+            border-bottom: 1px solid rgba(245, 239, 230, 0.05);
+        }
+
+        .season-high {
+            color: var(--emerald-light) !important;
+            font-weight: 600;
+        }
+
+        .season-peak {
+            color: var(--gold-light) !important;
+            font-weight: 700;
+        }
+
+        .season-low {
+            color: var(--red) !important;
+            font-weight: 500;
+        }
+
+        .occ-bar {
+            display: inline-block;
+            height: 8px;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .occ-bar-high { width: 80px; background: var(--emerald-light); }
+        .occ-bar-peak { width: 95px; background: var(--gold-light); }
+        .occ-bar-low { width: 40px; background: var(--red); }
+
+        /* ========================================
+           STRATEGY TIMELINE
+           ======================================== */
+        .timeline {
+            position: relative;
+            margin: 3rem 0;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--emerald), var(--gold), var(--emerald-light), var(--gold-light));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(184, 134, 11, 0.1);
+            border-radius: 16px;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-item:hover {
+            border-color: rgba(184, 134, 11, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transform: translateX(5px);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 2.2rem;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            background: var(--bg-dark);
+            z-index: 2;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -1.1rem;
+            top: 2.55rem;
+            width: 18px;
+            height: 2px;
+            background: rgba(184, 134, 11, 0.3);
+        }
+
+        .timeline-phase {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(27, 94, 59, 0.15);
+            border: 1px solid rgba(27, 94, 59, 0.25);
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--emerald-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-period {
+            font-size: 0.8rem;
+            color: var(--gold-light);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-actions {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-actions li {
+            padding: 0.3rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            font-size: 0.85rem;
+            color: var(--sand-muted);
+        }
+
+        .timeline-actions li::before {
+            content: '\2713';
+            position: absolute;
+            left: 0;
+            color: var(--emerald-light);
+            font-weight: 700;
+        }
+
+        .timeline-budget {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: rgba(184, 134, 11, 0.1);
+            border: 1px solid rgba(184, 134, 11, 0.2);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gold-light);
+        }
+
+        /* ========================================
+           FINANCIAL PROJECTIONS
+           ======================================== */
+        .finance-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        .finance-card {
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .finance-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            padding: 2px;
+            background: linear-gradient(135deg, transparent 30%, var(--emerald) 50%, var(--gold) 70%, transparent 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .finance-card:hover::before {
+            opacity: 1;
+        }
+
+        .finance-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .finance-current {
+            background: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(245, 239, 230, 0.1);
+        }
+
+        .finance-optimised {
+            background: rgba(27, 94, 59, 0.1);
+            border: 1px solid rgba(27, 94, 59, 0.25);
+        }
+
+        .finance-optimal {
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.08), rgba(27, 94, 59, 0.08));
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 40px var(--gold-glow);
+        }
+
+        .finance-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+        }
+
+        .finance-current .finance-label { color: var(--sand-dim); }
+        .finance-optimised .finance-label { color: var(--emerald-light); }
+        .finance-optimal .finance-label { color: var(--gold-light); }
+
+        .finance-amount {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .finance-optimal .finance-amount {
+            color: var(--gold-light);
+        }
+
+        .finance-details {
+            font-size: 0.8rem;
+            color: var(--sand-dim);
+        }
+
+        .finance-details span {
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .roi-banner {
+            margin-top: 2.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.08), rgba(27, 94, 59, 0.08));
+            border: 1px solid rgba(184, 134, 11, 0.2);
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .roi-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--sand-dim);
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-value {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--gold-light);
+        }
+
+        .roi-detail {
+            font-size: 0.85rem;
+            color: var(--sand-dim);
+            margin-top: 0.5rem;
+        }
+
+        /* ========================================
+           ACTIONS CHECKLIST
+           ======================================== */
+        .checklist {
+            list-style: none;
+            margin: 2rem 0;
+            counter-reset: check;
+        }
+
+        .checklist li {
+            counter-increment: check;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(184, 134, 11, 0.08);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--sand-muted);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .checklist li:hover {
+            border-color: rgba(184, 134, 11, 0.25);
+            background: var(--bg-card-hover);
+            transform: translateX(8px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .checklist li::before {
+            content: counter(check);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+            color: var(--white);
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .check-priority {
+            margin-left: auto;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            flex-shrink: 0;
+        }
+
+        .priority-urgent {
+            background: rgba(192, 57, 43, 0.15);
+            color: var(--red);
+            border: 1px solid rgba(192, 57, 43, 0.25);
+        }
+
+        .priority-high {
+            background: rgba(230, 126, 34, 0.15);
+            color: var(--orange);
+            border: 1px solid rgba(230, 126, 34, 0.25);
+        }
+
+        .priority-medium {
+            background: rgba(41, 128, 185, 0.15);
+            color: var(--blue);
+            border: 1px solid rgba(41, 128, 185, 0.25);
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(184, 134, 11, 0.1);
+            background: var(--bg-dark);
+        }
+
+        .footer-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto 1.5rem;
+        }
+
+        .footer p {
+            font-size: 0.75rem;
+            color: var(--sand-dim);
+            margin-bottom: 0.3rem;
+        }
+
+        .footer .footer-sources {
+            font-size: 0.65rem;
+            color: rgba(245, 239, 230, 0.3);
+            max-width: 700px;
+            margin: 1rem auto 0;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 900px) {
+            .swot-grid {
+                grid-template-columns: 1fr;
+            }
+            .finance-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-links {
+                display: none;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stat-item::after {
+                display: none;
+            }
+            .price-label {
+                width: 100px;
+                font-size: 0.7rem;
+            }
+            .confusion-table {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            section {
+                padding: 4rem 1rem;
+            }
+            .section-alt > .section-inner {
+                padding: 0 1rem;
+            }
+            .id-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline {
+                padding-left: 2rem;
+            }
+            .timeline-item {
+                padding: 1.5rem;
+            }
+            .price-segment {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .price-label {
+                text-align: left;
+                width: auto;
+            }
+            .price-bar-container {
+                width: 100%;
+            }
+            .presence-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========================================
+           PRINT STYLES
+           ======================================== */
+        @media print {
+            * {
+                background: white !important;
+                color: #111 !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            body::after {
+                display: none !important;
+            }
+            .nav, .progress-bar, .hero-particles, .hero-scroll, .scroll-line {
+                display: none !important;
+            }
+            .hero {
+                min-height: auto;
+                padding: 2rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+                color: #111 !important;
+            }
+            .hero h1 em {
+                color: #8B6914 !important;
+            }
+            section {
+                padding: 2rem 1rem;
+                page-break-inside: avoid;
+            }
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .swot-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .finance-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .comp-table, .season-table {
+                font-size: 0.7rem;
+            }
+            .id-card, .swot-card, .finance-card, .timeline-item, .checklist li {
+                border: 1px solid #ccc !important;
+            }
+            .price-bar {
+                border: 1px solid #ccc !important;
+            }
+        }
+
+        /* ========================================
+           GLASS MORPHISM UTILITY
+           ======================================== */
+        .glass {
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            border: 1px solid rgba(245, 239, 230, 0.08);
+        }
+
+        /* ========================================
+           CUSTOM SCROLLBAR
+           ======================================== */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(184, 134, 11, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(184, 134, 11, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress Bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation -->
+<nav class="nav" id="mainNav">
+    <div class="nav-brand">Casbah Amor</div>
+    <ul class="nav-links">
+        <li><a href="#identite">Identite</a></li>
+        <li><a href="#presence">Presence</a></li>
+        <li><a href="#prix">Prix</a></li>
+        <li><a href="#concurrents">Concurrents</a></li>
+        <li><a href="#swot">SWOT</a></li>
+        <li><a href="#marche">Marche</a></li>
+        <li><a href="#strategie">Strategie</a></li>
+        <li><a href="#projections">Projections</a></li>
+        <li><a href="#actions">Actions</a></li>
+    </ul>
+</nav>
+
+<!-- ==========================================
+     HERO
+     ========================================== -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-particles" id="particles"></div>
+    <div class="hero-content">
+        <div class="hero-badge">Rapport strategique 2026</div>
+        <h1>Analyse Concurrentielle<br><em>Casbah Amor</em></h1>
+        <div class="hero-line"></div>
+        <p>Riad de luxe exclusif &mdash; 3 Rue Mohamed El Mellakh, Medina de Marrakech.<br>Hote : Mehdi (Superhote) &middot; Positionnement haut de gamme, vision 360.</p>
+        <a href="#identite" class="hero-scroll">
+            Decouvrir
+            <span class="scroll-line"></span>
+        </a>
+    </div>
+</section>
+
+<!-- ==========================================
+     FICHE D'IDENTITE
+     ========================================== -->
+<section id="identite">
+    <div class="reveal">
+        <span class="section-label">01 / Fiche d'identite</span>
+        <h2 class="section-title">Casbah Amor</h2>
+        <p class="section-subtitle">Riad de luxe exclusif &mdash; Rooftop with Pool &amp; Air Conditioning &mdash; Coup de coeur voyageurs</p>
+        <div class="section-divider"></div>
+    </div>
+
+    <div class="id-grid">
+        <div class="id-card id-card-featured reveal reveal-delay-1">
+            <span class="id-card-icon">&#9733;</span>
+            <div class="id-card-label">Notes</div>
+            <div class="id-card-value"><span class="gold">4.94</span>/5 Airbnb</div>
+            <div class="id-card-detail">18 avis &middot; Coup de coeur voyageurs &middot; 10/10 Booking.com (1 avis)</div>
+        </div>
+
+        <div class="id-card reveal reveal-delay-2">
+            <span class="id-card-icon">&#9962;</span>
+            <div class="id-card-label">Capacite</div>
+            <div class="id-card-value">13 <span class="gold">voyageurs</span></div>
+            <div class="id-card-detail">6 chambres &middot; 7 lits &middot; 6.5 salles de bain &middot; 300 m&sup2;</div>
+        </div>
+
+        <div class="id-card reveal reveal-delay-3">
+            <span class="id-card-icon">&#9775;</span>
+            <div class="id-card-label">Hote</div>
+            <div class="id-card-value">Mehdi</div>
+            <div class="id-card-detail">Superhote &middot; Reactivite 100% dans l'heure &middot; Listing actif depuis ~8 mois</div>
+        </div>
+
+        <div class="id-card id-card-featured reveal reveal-delay-4">
+            <span class="id-card-icon">&#8364;</span>
+            <div class="id-card-label">Prix / nuit</div>
+            <div class="id-card-value">~761 <span class="gold">&euro;</span></div>
+            <div class="id-card-detail">Riad entier en location exclusive (prix Airbnb, avril 2026)</div>
+        </div>
+
+        <div class="id-card reveal reveal-delay-5">
+            <span class="id-card-icon">&#127946;</span>
+            <div class="id-card-label">Equipements cles</div>
+            <div class="id-card-value">Piscine <span class="gold">rooftop</span></div>
+            <div class="id-card-detail">Chauffee (supplement 38&euro;/jour) &middot; Climatisation &middot; Design eclectique par decorateur pro</div>
+        </div>
+
+        <div class="id-card reveal reveal-delay-6">
+            <span class="id-card-icon">&#9906;</span>
+            <div class="id-card-label">Emplacement</div>
+            <div class="id-card-value">Medina</div>
+            <div class="id-card-detail">3 Rue Mohamed El Mellakh, 40000 Marrakech</div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     PRESENCE DIGITALE
+     ========================================== -->
+<section class="section-alt" id="presence">
+    <div class="section-inner">
+        <div class="reveal">
+            <span class="section-label">02 / Presence digitale</span>
+            <h2 class="section-title">Etat des lieux en ligne</h2>
+            <p class="section-subtitle">Ou Casbah Amor existe aujourd'hui &mdash; et ou il est absent</p>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="presence-grid">
+            <div class="presence-card active reveal reveal-delay-1">
+                <div class="presence-icon">&#127968;</div>
+                <div class="presence-info">
+                    <div class="presence-name">Airbnb</div>
+                    <div class="presence-status">4.94/5 &middot; 18 avis &middot; Superhote &middot; Coup de coeur</div>
+                </div>
+            </div>
+            <div class="presence-card active reveal reveal-delay-2">
+                <div class="presence-icon">&#127463;</div>
+                <div class="presence-info">
+                    <div class="presence-name">Booking.com</div>
+                    <div class="presence-status">10/10 &middot; 1 avis &middot; Quality score 3/5 (nouveau)</div>
+                </div>
+            </div>
+            <div class="presence-card active reveal reveal-delay-3">
+                <div class="presence-icon">&#128247;</div>
+                <div class="presence-info">
+                    <div class="presence-name">Instagram</div>
+                    <div class="presence-status">@casbah_amor &middot; Actif</div>
+                </div>
+            </div>
+            <div class="presence-card inactive reveal reveal-delay-4">
+                <div class="presence-icon">&#127760;</div>
+                <div class="presence-info">
+                    <div class="presence-name">Site web</div>
+                    <div class="presence-status">Absent &mdash; En cours de creation</div>
+                </div>
+            </div>
+            <div class="presence-card inactive reveal reveal-delay-5">
+                <div class="presence-icon">&#128205;</div>
+                <div class="presence-info">
+                    <div class="presence-name">Google Business</div>
+                    <div class="presence-status">Absent &mdash; A creer en priorite</div>
+                </div>
+            </div>
+            <div class="presence-card inactive reveal reveal-delay-6">
+                <div class="presence-icon">&#9992;</div>
+                <div class="presence-info">
+                    <div class="presence-name">TripAdvisor</div>
+                    <div class="presence-status">Absent &mdash; A creer</div>
+                </div>
+            </div>
+            <div class="presence-card inactive reveal">
+                <div class="presence-icon">&#128100;</div>
+                <div class="presence-info">
+                    <div class="presence-name">Facebook</div>
+                    <div class="presence-status">Absent &mdash; A creer</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     POSITIONNEMENT PRIX
+     ========================================== -->
+<section id="prix">
+    <div class="reveal">
+        <span class="section-label">03 / Positionnement prix</span>
+        <h2 class="section-title">Ou se situe Casbah Amor ?</h2>
+        <p class="section-subtitle">Segmentation du marche des riads a Marrakech par gamme tarifaire</p>
+        <div class="section-divider"></div>
+    </div>
+
+    <div class="price-chart reveal">
+        <div class="price-segment">
+            <div class="price-label">Budget</div>
+            <div class="price-bar-container">
+                <div class="price-bar price-bar-budget" data-width="15%">
+                    <span class="price-bar-text">25 &ndash; 60 &euro;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="price-segment">
+            <div class="price-label">Milieu de gamme</div>
+            <div class="price-bar-container">
+                <div class="price-bar price-bar-mid" data-width="32%">
+                    <span class="price-bar-text">60 &ndash; 150 &euro;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="price-segment">
+            <div class="price-label">Premium</div>
+            <div class="price-bar-container">
+                <div class="price-bar price-bar-premium" data-width="52%">
+                    <span class="price-bar-text">150 &ndash; 350 &euro;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="price-segment">
+            <div class="price-label" style="font-weight:700; color: var(--gold-light);">Luxe</div>
+            <div class="price-bar-container">
+                <div class="price-bar price-bar-luxe" data-width="78%">
+                    <span class="price-bar-text">350 &ndash; 800 &euro;</span>
+                    <span class="casbah-marker">&#9670; Casbah Amor &mdash; ~761 &euro;</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="price-segment">
+            <div class="price-label">Ultra-luxe (palaces)</div>
+            <div class="price-bar-container">
+                <div class="price-bar price-bar-ultra" data-width="100%">
+                    <span class="price-bar-text">800 &ndash; 2 500+ &euro;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     COMPARAISON CONCURRENTS
+     ========================================== -->
+<section class="section-alt" id="concurrents">
+    <div class="section-inner">
+        <div class="reveal">
+            <span class="section-label">04 / Concurrents directs</span>
+            <h2 class="section-title">Benchmark concurrentiel</h2>
+            <p class="section-subtitle">Les principaux acteurs du segment luxe a Marrakech</p>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="table-wrapper reveal">
+            <table class="comp-table">
+                <thead>
+                    <tr>
+                        <th>Riad</th>
+                        <th>Prix / nuit</th>
+                        <th>Chambres</th>
+                        <th>Piscine</th>
+                        <th>Note</th>
+                        <th>Differenciateur</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row-highlight">
+                        <td class="riad-name">Casbah Amor</td>
+                        <td>~761 &euro;</td>
+                        <td>6</td>
+                        <td class="pool-check">&#10003; Rooftop chauffee</td>
+                        <td><span class="note-badge note-gold">4.94/5 + 10/10</span></td>
+                        <td>Design eclectique, 13 guests, piscine rooftop</td>
+                    </tr>
+                    <tr class="row-rival">
+                        <td class="riad-name">Riad Kasbah Amour <span class="rival-tag">Nom similaire</span></td>
+                        <td>~629 &euro;</td>
+                        <td>3</td>
+                        <td class="pool-check">&#10003; Rooftop</td>
+                        <td><span class="note-badge note-high">5/5 (12 avis)</span></td>
+                        <td>kasbahamour.com &middot; Proprietaires : Isabelle &amp; Laurent</td>
+                    </tr>
+                    <tr>
+                        <td class="riad-name">IZZA Marrakech</td>
+                        <td>~600+ &euro;</td>
+                        <td>4</td>
+                        <td class="pool-check">&#10003;</td>
+                        <td><span class="note-badge note-high">9.5/10</span></td>
+                        <td>300+ oeuvres d'art, collection a 5M GBP</td>
+                    </tr>
+                    <tr>
+                        <td class="riad-name">La Villa des Orangers</td>
+                        <td>~500 &euro;</td>
+                        <td>8</td>
+                        <td class="pool-check">&#10003;</td>
+                        <td><span class="note-badge note-high">9.3/10</span></td>
+                        <td>Relais &amp; Chateaux, spa complet</td>
+                    </tr>
+                    <tr>
+                        <td class="riad-name">Riad El Fenn</td>
+                        <td>~400 &euro;</td>
+                        <td>21</td>
+                        <td class="pool-check">&#10003;</td>
+                        <td><span class="note-badge note-high">9.2/10</span></td>
+                        <td>Bar rooftop, galerie d'art contemporain</td>
+                    </tr>
+                    <tr>
+                        <td class="riad-name">Riad L'Hotel</td>
+                        <td>~355 &euro;</td>
+                        <td>5</td>
+                        <td class="pool-check">&#10003;</td>
+                        <td><span class="note-badge note-medium">9.0/10</span></td>
+                        <td>Hotel-boutique etabli, reputation solide</td>
+                    </tr>
+                    <tr>
+                        <td class="riad-name">Riad Yasmine</td>
+                        <td>~162 $</td>
+                        <td>7</td>
+                        <td class="pool-check">&#10003; Virale Instagram</td>
+                        <td><span class="note-badge note-medium">4.7/5</span></td>
+                        <td>Star Instagram, piscine photogenique</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Confusion alert -->
+        <div class="confusion-alert reveal">
+            <div class="confusion-alert-title">
+                &#9888; Attention : risque de confusion entre deux riads au nom similaire
+            </div>
+            <p>
+                "Casbah Amor" et "Riad Kasbah Amour" (kasbahamour.com) sont deux etablissements completement differents et <strong>concurrents directs</strong>.
+                La proximite des noms cree un risque de confusion pour les voyageurs et dans les resultats de recherche.
+            </p>
+            <div class="confusion-table">
+                <div class="confusion-col us">
+                    <div class="confusion-col-title">Casbah Amor (nous)</div>
+                    <ul>
+                        <li>Hote : Mehdi (Superhote)</li>
+                        <li>6 chambres, 13 voyageurs, 300 m&sup2;</li>
+                        <li>~761 &euro;/nuit</li>
+                        <li>Airbnb + Booking uniquement</li>
+                        <li>Pas de site web (en cours)</li>
+                        <li>@casbah_amor</li>
+                    </ul>
+                </div>
+                <div class="confusion-col them">
+                    <div class="confusion-col-title">Riad Kasbah Amour (concurrent)</div>
+                    <ul>
+                        <li>Proprietaires : Isabelle &amp; Laurent</li>
+                        <li>3 chambres</li>
+                        <li>~629 &euro;/nuit</li>
+                        <li>Site web : kasbahamour.com</li>
+                        <li>5/5 (12 avis Airbnb)</li>
+                        <li>Concurrent a surveiller de pres</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     ANALYSE SWOT
+     ========================================== -->
+<section id="swot">
+    <div class="reveal">
+        <span class="section-label">05 / Analyse SWOT</span>
+        <h2 class="section-title">Forces, faiblesses, opportunites, menaces</h2>
+        <p class="section-subtitle">Diagnostic strategique complet de Casbah Amor</p>
+        <div class="section-divider"></div>
+    </div>
+
+    <div class="swot-grid">
+        <!-- Forces -->
+        <div class="swot-card swot-forces reveal reveal-delay-1">
+            <div class="swot-header">
+                <div class="swot-icon">&#9650;</div>
+                <h3 class="swot-title">Forces</h3>
+            </div>
+            <ul class="swot-list">
+                <li>Design unique par decorateur professionnel (eclectique)</li>
+                <li>Piscine rooftop chauffee &mdash; rare a Marrakech</li>
+                <li>Note quasi-parfaite : 4.94/5 Airbnb + 10/10 Booking</li>
+                <li>Label "Coup de coeur voyageurs" Airbnb</li>
+                <li>Capacite 13 personnes &mdash; tres rare dans le segment luxe</li>
+                <li>Service personnalise par Mehdi (Superhote, 100% reactivite dans l'heure)</li>
+            </ul>
+        </div>
+
+        <!-- Faiblesses -->
+        <div class="swot-card swot-faiblesses reveal reveal-delay-2">
+            <div class="swot-header">
+                <div class="swot-icon">&#9660;</div>
+                <h3 class="swot-title">Faiblesses</h3>
+            </div>
+            <ul class="swot-list">
+                <li>Listing TRES nouveau (seulement ~8 mois)</li>
+                <li>Seulement 19 avis au total (18 Airbnb + 1 Booking)</li>
+                <li>Pas de site web actuellement</li>
+                <li>Absent de TripAdvisor, Facebook, Google Business</li>
+                <li>Piscine chauffee en supplement (38&euro;/jour)</li>
+                <li>Ne convient pas aux enfants / bebes</li>
+            </ul>
+        </div>
+
+        <!-- Opportunites -->
+        <div class="swot-card swot-opportunites reveal reveal-delay-3">
+            <div class="swot-header">
+                <div class="swot-icon">&#10070;</div>
+                <h3 class="swot-title">Opportunites</h3>
+            </div>
+            <ul class="swot-list">
+                <li>Marche Marrakech en croissance : +19% en 2025</li>
+                <li>Design viral non encore exploite sur les reseaux sociaux</li>
+                <li>Direct booking via site web = economie de 15-25% de commission OTA</li>
+                <li>Partenariats micro-influenceurs (potentiel Instagram/TikTok)</li>
+                <li>Capacite 13 personnes rare &mdash; creneau groupe/famille elargie</li>
+                <li>Packages thematiques (wellness, romance, culture, enterrement de vie)</li>
+            </ul>
+        </div>
+
+        <!-- Menaces -->
+        <div class="swot-card swot-menaces reveal reveal-delay-4">
+            <div class="swot-header">
+                <div class="swot-icon">&#9888;</div>
+                <h3 class="swot-title">Menaces</h3>
+            </div>
+            <ul class="swot-list">
+                <li>Concurrent direct avec nom similaire : "Riad Kasbah Amour" (kasbahamour.com)</li>
+                <li>9 624 annonces Airbnb actives a Marrakech</li>
+                <li>Saisonnalite forte : chute juin-septembre</li>
+                <li>Dependance totale aux OTA (Airbnb + Booking uniquement)</li>
+                <li>Concurrence croissante des villas en Palmeraie</li>
+                <li>Hausse potentielle des taxes de sejour</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     MARCHE MARRAKECH
+     ========================================== -->
+<section class="section-alt" id="marche">
+    <div class="section-inner">
+        <div class="reveal">
+            <span class="section-label">06 / Marche Marrakech 2025-2026</span>
+            <h2 class="section-title">Un marche en pleine expansion</h2>
+            <p class="section-subtitle">Chiffres cles du tourisme a Marrakech</p>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item reveal reveal-delay-1">
+                <div class="stat-number"><span class="counter" data-target="4">0</span> <span class="stat-suffix">M</span></div>
+                <div class="stat-label">Visiteurs en 2024</div>
+            </div>
+            <div class="stat-item reveal reveal-delay-2">
+                <div class="stat-number"><span class="counter" data-target="5">0</span> <span class="stat-suffix">M</span></div>
+                <div class="stat-label">Nuitees S1 2025 (+6%)</div>
+            </div>
+            <div class="stat-item reveal reveal-delay-3">
+                <div class="stat-number"><span class="counter" data-target="71">0</span><span class="stat-suffix">%</span></div>
+                <div class="stat-label">Taux d'occupation</div>
+            </div>
+            <div class="stat-item reveal reveal-delay-4">
+                <div class="stat-number">6<span class="stat-suffix">e</span></div>
+                <div class="stat-label">Destination mondiale Airbnb</div>
+            </div>
+            <div class="stat-item reveal reveal-delay-5">
+                <div class="stat-number"><span class="counter" data-target="40">0</span><span class="stat-suffix">%</span></div>
+                <div class="stat-label">Du tourisme national marocain</div>
+            </div>
+        </div>
+
+        <div class="reveal" style="margin-top: 2rem;">
+            <h3 style="font-family: var(--font-heading); font-size: 1.5rem; color: var(--white); margin-bottom: 1rem;">Saisonnalite</h3>
+            <div class="table-wrapper">
+                <table class="season-table">
+                    <thead>
+                        <tr>
+                            <th>Saison</th>
+                            <th>Mois</th>
+                            <th>Occupation</th>
+                            <th>Impact prix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="season-high">Haute saison</td>
+                            <td>Octobre &ndash; Mai</td>
+                            <td>75 &ndash; 90% <span class="occ-bar occ-bar-high"></span></td>
+                            <td class="season-high">Tarif plein</td>
+                        </tr>
+                        <tr>
+                            <td class="season-peak">Pic absolu</td>
+                            <td>Avril, Noel / Nouvel An</td>
+                            <td>85 &ndash; 95% <span class="occ-bar occ-bar-peak"></span></td>
+                            <td class="season-peak">+20 a +30%</td>
+                        </tr>
+                        <tr>
+                            <td class="season-low">Basse saison</td>
+                            <td>Juin &ndash; Septembre</td>
+                            <td>30 &ndash; 50% <span class="occ-bar occ-bar-low"></span></td>
+                            <td class="season-low">&minus;30 a &minus;40%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     STRATEGIE MARKETING
+     ========================================== -->
+<section id="strategie">
+    <div class="reveal">
+        <span class="section-label">07 / Strategie marketing</span>
+        <h2 class="section-title">Feuille de route recommandee</h2>
+        <p class="section-subtitle">Plan d'action progressif sur 12 mois</p>
+        <div class="section-divider"></div>
+    </div>
+
+    <div class="timeline">
+        <div class="timeline-item reveal">
+            <span class="timeline-phase">Phase 1</span>
+            <h3 class="timeline-title">Fondations digitales</h3>
+            <div class="timeline-period">Mois 1 &ndash; 2</div>
+            <ul class="timeline-actions">
+                <li>Creer et optimiser Google Business Profile</li>
+                <li>Inscrire Casbah Amor sur TripAdvisor</li>
+                <li>Creer la page Facebook professionnelle</li>
+                <li>Consolider le profil Instagram @casbah_amor (bio, highlights, feed regulier)</li>
+                <li>Optimiser les fiches OTA (Airbnb, Booking) &mdash; photos, descriptions, SEO</li>
+            </ul>
+            <span class="timeline-budget">Gratuit</span>
+        </div>
+
+        <div class="timeline-item reveal">
+            <span class="timeline-phase">Phase 2</span>
+            <h3 class="timeline-title">Site web &amp; Croissance</h3>
+            <div class="timeline-period">Mois 3 &ndash; 4</div>
+            <ul class="timeline-actions">
+                <li>Deployer le site web professionnel avec booking direct</li>
+                <li>Travailler le SEO pour se differencier de "Riad Kasbah Amour"</li>
+                <li>Lancer un programme micro-influenceurs (3-5 collabs)</li>
+                <li>Mettre en place l'email marketing (Mailchimp/Brevo)</li>
+            </ul>
+            <span class="timeline-budget">2 000 &ndash; 3 000 &euro;</span>
+        </div>
+
+        <div class="timeline-item reveal">
+            <span class="timeline-phase">Phase 3</span>
+            <h3 class="timeline-title">Acceleration</h3>
+            <div class="timeline-period">Mois 5 &ndash; 8</div>
+            <ul class="timeline-actions">
+                <li>Lancer des packages thematiques (romance, culture, bien-etre, groupes)</li>
+                <li>Creer du contenu TikTok / Reels (piscine rooftop, design, cuisine)</li>
+                <li>Implementer le pricing dynamique</li>
+                <li>Developper les partenariats locaux (restaurants, guides, spas)</li>
+                <li>Cibler le creneau "groupes 10-13 personnes" (creneau rare)</li>
+            </ul>
+            <span class="timeline-budget">500 &euro; / mois</span>
+        </div>
+
+        <div class="timeline-item reveal">
+            <span class="timeline-phase">Phase 4</span>
+            <h3 class="timeline-title">Optimisation &amp; Scale</h3>
+            <div class="timeline-period">Mois 9 &ndash; 12</div>
+            <ul class="timeline-actions">
+                <li>Lancer Google Ads &amp; Meta Ads cibles (marque + generique)</li>
+                <li>Developper la presence Pinterest (visuels lifestyle)</li>
+                <li>Mettre en place un programme de fidelite</li>
+                <li>Analyser et optimiser le taux de conversion booking direct</li>
+                <li>Viser 50+ avis Airbnb et 10+ avis Booking pour asseoir la credibilite</li>
+            </ul>
+            <span class="timeline-budget">500 &ndash; 900 &euro; / mois</span>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     PROJECTIONS FINANCIERES
+     ========================================== -->
+<section class="section-alt" id="projections">
+    <div class="section-inner">
+        <div class="reveal">
+            <span class="section-label">08 / Projections financieres</span>
+            <h2 class="section-title">Potentiel de revenus</h2>
+            <p class="section-subtitle">Trois scenarios a 6 et 12 mois (base : 761&euro;/nuit)</p>
+            <div class="section-divider"></div>
+        </div>
+
+        <div class="finance-grid">
+            <div class="finance-card finance-current reveal reveal-delay-1">
+                <div class="finance-label">Actuel (estime)</div>
+                <div class="finance-amount">~139 000 &euro;</div>
+                <div class="finance-details">
+                    <span>Occupation : ~50%</span>
+                    <span>Prix moyen : 761 &euro;/nuit</span>
+                    <span>~183 nuits/an</span>
+                </div>
+            </div>
+
+            <div class="finance-card finance-optimised reveal reveal-delay-2">
+                <div class="finance-label">Optimise (6 mois)</div>
+                <div class="finance-amount">~181 000 &euro;</div>
+                <div class="finance-details">
+                    <span>Occupation : 65%</span>
+                    <span>Prix moyen : 761 &euro;/nuit</span>
+                    <span style="color: var(--emerald-light); font-weight: 600;">+30% vs actuel</span>
+                </div>
+            </div>
+
+            <div class="finance-card finance-optimal reveal reveal-delay-3">
+                <div class="finance-label">Optimal (12 mois)</div>
+                <div class="finance-amount">~208 000 &euro;</div>
+                <div class="finance-details">
+                    <span>Occupation : 75%</span>
+                    <span>Prix moyen : 761 &euro;/nuit</span>
+                    <span style="color: var(--gold-light); font-weight: 600;">+50% vs actuel</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="roi-banner reveal">
+            <div class="roi-title">Retour sur investissement</div>
+            <div class="roi-value">ROI 2.8x &ndash; 4.6x</div>
+            <div class="roi-detail">Budget marketing 15 000 &euro;/an &rarr; +42 000 a +69 000 &euro; de revenus supplementaires</div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================
+     ACTIONS IMMEDIATES
+     ========================================== -->
+<section id="actions">
+    <div class="reveal">
+        <span class="section-label">09 / Actions immediates</span>
+        <h2 class="section-title">8 actions a lancer cette semaine</h2>
+        <p class="section-subtitle">Quick wins a impact maximal, zero budget necessaire</p>
+        <div class="section-divider"></div>
+    </div>
+
+    <ul class="checklist">
+        <li class="reveal reveal-delay-1">
+            Creer la fiche Google Business Profile complete (adresse : 3 Rue Mohamed El Mellakh)
+            <span class="check-priority priority-urgent">Urgent</span>
+        </li>
+        <li class="reveal reveal-delay-2">
+            Creer la fiche TripAdvisor avec toutes les photos
+            <span class="check-priority priority-urgent">Urgent</span>
+        </li>
+        <li class="reveal reveal-delay-3">
+            Consolider Instagram @casbah_amor (bio, highlights, stories, feed regulier)
+            <span class="check-priority priority-urgent">Urgent</span>
+        </li>
+        <li class="reveal reveal-delay-4">
+            Creer une page Facebook professionnelle
+            <span class="check-priority priority-high">Prioritaire</span>
+        </li>
+        <li class="reveal reveal-delay-5">
+            Enrichir les photos et descriptions sur Airbnb + Booking.com
+            <span class="check-priority priority-high">Prioritaire</span>
+        </li>
+        <li class="reveal reveal-delay-6">
+            Encourager les 18 guests passes a laisser un avis sur Booking pour monter le quality score
+            <span class="check-priority priority-high">Prioritaire</span>
+        </li>
+        <li class="reveal">
+            Deployer le nouveau site web avec booking direct (se differencier de kasbahamour.com)
+            <span class="check-priority priority-medium">Semaine 2</span>
+        </li>
+        <li class="reveal">
+            Contacter 3 micro-influenceurs voyage/Marrakech pour des collabs
+            <span class="check-priority priority-medium">Semaine 2</span>
+        </li>
+    </ul>
+</section>
+
+<!-- ==========================================
+     FOOTER
+     ========================================== -->
+<footer class="footer">
+    <div class="footer-line"></div>
+    <p style="font-family: var(--font-heading); font-size: 1.1rem; color: var(--gold-light); margin-bottom: 0.5rem;">Casbah Amor &mdash; Analyse Concurrentielle</p>
+    <p>Rapport genere le 4 mars 2026 &mdash; Analyse automatisee multi-agents</p>
+    <p class="footer-sources">Sources : Airbnb, Booking.com, donnees tourisme Maroc 2024-2025, Observatoire du Tourisme du Maroc, STR Global, AirDNA. Casbah Amor (hote Mehdi) est distinct de Riad Kasbah Amour (kasbahamour.com, Isabelle &amp; Laurent).</p>
+</footer>
+
+<!-- ==========================================
+     JAVASCRIPT
+     ========================================== -->
+<script>
+(function() {
+    'use strict';
+
+    /* ----------------------------------------
+       PROGRESS BAR
+       ---------------------------------------- */
+    const progressBar = document.getElementById('progressBar');
+    function updateProgress() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        progressBar.style.width = progress + '%';
+    }
+
+    /* ----------------------------------------
+       NAV SCROLL EFFECT
+       ---------------------------------------- */
+    const nav = document.getElementById('mainNav');
+    function updateNav() {
+        if (window.scrollY > 80) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    }
+
+    /* ----------------------------------------
+       PARTICLES
+       ---------------------------------------- */
+    const particlesContainer = document.getElementById('particles');
+    function createParticles() {
+        const count = 30;
+        for (let i = 0; i < count; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (8 + Math.random() * 15) + 's';
+            particle.style.animationDelay = (Math.random() * 10) + 's';
+            particle.style.width = (1 + Math.random() * 2) + 'px';
+            particle.style.height = particle.style.width;
+            if (Math.random() > 0.5) {
+                particle.style.background = 'var(--emerald-light)';
+            }
+            particlesContainer.appendChild(particle);
+        }
+    }
+    createParticles();
+
+    /* ----------------------------------------
+       INTERSECTION OBSERVER — REVEAL
+       ---------------------------------------- */
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -60px 0px'
+    });
+
+    reveals.forEach(function(el) {
+        revealObserver.observe(el);
+    });
+
+    /* ----------------------------------------
+       ANIMATED COUNTERS
+       ---------------------------------------- */
+    const counters = document.querySelectorAll('.counter');
+    let countersAnimated = {};
+
+    const counterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                const counter = entry.target;
+                const id = counter.dataset.target;
+                if (countersAnimated[id]) return;
+                countersAnimated[id] = true;
+
+                const target = parseInt(counter.dataset.target);
+                const duration = 2000;
+                const startTime = performance.now();
+
+                function animateCounter(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // Ease out cubic
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    const current = Math.round(eased * target);
+                    counter.textContent = current;
+                    if (progress < 1) {
+                        requestAnimationFrame(animateCounter);
+                    }
+                }
+                requestAnimationFrame(animateCounter);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    counters.forEach(function(counter) {
+        counterObserver.observe(counter);
+    });
+
+    /* ----------------------------------------
+       PRICE BARS ANIMATION
+       ---------------------------------------- */
+    const priceBars = document.querySelectorAll('.price-bar');
+    const priceObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                const bar = entry.target;
+                bar.classList.add('animated');
+                bar.style.width = bar.dataset.width;
+            }
+        });
+    }, { threshold: 0.2 });
+
+    priceBars.forEach(function(bar) {
+        priceObserver.observe(bar);
+    });
+
+    /* ----------------------------------------
+       SCROLL EVENTS
+       ---------------------------------------- */
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            requestAnimationFrame(function() {
+                updateProgress();
+                updateNav();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+
+    /* ----------------------------------------
+       SMOOTH SCROLL FOR ANCHORS
+       ---------------------------------------- */
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const target = document.querySelector(targetId);
+            if (target) {
+                const navHeight = nav.offsetHeight;
+                const targetPos = target.getBoundingClientRect().top + window.scrollY - navHeight - 20;
+                window.scrollTo({ top: targetPos, behavior: 'smooth' });
+            }
+        });
+    });
+
+    /* ----------------------------------------
+       INIT
+       ---------------------------------------- */
+    updateProgress();
+    updateNav();
+
+})();
+</script>
+
+</body>
+</html>

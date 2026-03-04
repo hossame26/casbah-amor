@@ -1,0 +1,2642 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation | Casbah Amor - Riad de Luxe a Marrakech</title>
+    <meta name="description" content="Reservez votre sejour au Casbah Amor, riad exclusif au coeur de la Medina de Marrakech. 6 chambres, piscine chauffee, 13 voyageurs. Superhote Mehdi. 4.94/5 sur Airbnb.">
+    <meta property="og:title" content="Reservez votre sejour au Casbah Amor">
+    <meta property="og:description" content="Riad de luxe exclusif avec piscine chauffee sur le rooftop. 6 chambres, 13 voyageurs. Medina de Marrakech.">
+    <meta property="og:image" content="images/hero.jpg">
+    <meta property="og:type" content="website">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ========== RESET & VARIABLES ========== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --emerald: #1B5E3B;
+            --emerald-light: #2D8A5E;
+            --emerald-dark: #0D3B23;
+            --emerald-pale: #E8F5EE;
+            --sand: #F5EFE6;
+            --sand-light: #FAF7F2;
+            --sand-dark: #E8DFD0;
+            --gold: #B8860B;
+            --gold-light: #D4A843;
+            --gold-dark: #8B6914;
+            --gold-pale: rgba(184, 134, 11, 0.08);
+            --white: #FFFFFF;
+            --black: #1A1A1A;
+            --text: #2C2C2C;
+            --text-light: #6B6B6B;
+            --text-muted: #999;
+            --danger: #C0392B;
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Montserrat', -apple-system, sans-serif;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.15);
+            --radius-sm: 8px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text);
+            background: var(--sand-light);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: color var(--transition); }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ========== LOADER ========== */
+        .loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--emerald-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loader-ornament {
+            width: 60px;
+            height: 60px;
+            border: 3px solid transparent;
+            border-top-color: var(--gold-light);
+            border-bottom-color: var(--gold-light);
+            border-radius: 50%;
+            animation: loaderSpin 1.2s linear infinite;
+        }
+        .loader-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--gold-light);
+            letter-spacing: 0.3em;
+            margin-top: 1.5rem;
+        }
+        .loader-sub {
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            color: rgba(212, 168, 67, 0.5);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+        @keyframes loaderSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== NAV ========== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 24px;
+            transition: background var(--transition), backdrop-filter var(--transition), box-shadow var(--transition);
+        }
+        .nav.scrolled {
+            background: rgba(13, 59, 35, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--gold-light);
+            letter-spacing: 0.15em;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            list-style: none;
+        }
+        .nav-links a {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            position: relative;
+            padding: 4px 0;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--gold-light);
+            transition: width var(--transition);
+        }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-links a:hover { color: var(--gold-light); }
+        .nav-cta {
+            background: var(--gold);
+            color: var(--white) !important;
+            padding: 10px 24px !important;
+            border-radius: 50px;
+            font-weight: 600 !important;
+            letter-spacing: 0.05em !important;
+            transition: all var(--transition) !important;
+        }
+        .nav-cta:hover {
+            background: var(--gold-light) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(184, 134, 11, 0.4);
+        }
+        .nav-cta::after { display: none !important; }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px;
+            z-index: 1001;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--gold-light);
+            transition: all var(--transition);
+            border-radius: 2px;
+        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 59, 35, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .mobile-menu.active { opacity: 1; visibility: visible; }
+        .mobile-menu a {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--sand);
+            letter-spacing: 0.1em;
+            transition: color var(--transition);
+        }
+        .mobile-menu a:hover { color: var(--gold-light); }
+
+        /* ========== HERO ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.05);
+            animation: heroZoom 20s ease-in-out infinite alternate;
+        }
+        @keyframes heroZoom {
+            from { transform: scale(1.05); }
+            to { transform: scale(1.15); }
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(13, 59, 35, 0.4) 0%,
+                rgba(13, 59, 35, 0.6) 40%,
+                rgba(13, 59, 35, 0.85) 100%
+            );
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 24px;
+            max-width: 900px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(184, 134, 11, 0.2);
+            border: 1px solid rgba(184, 134, 11, 0.4);
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: var(--gold-light);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            animation: fadeUp 0.8s ease-out;
+        }
+        .hero-badge .star { font-size: 1rem; }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400;
+            color: var(--white);
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            animation: fadeUp 0.8s ease-out 0.15s both;
+        }
+        .hero-title em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+        .hero-subtitle {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: rgba(255,255,255,0.8);
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            animation: fadeUp 0.8s ease-out 0.3s both;
+        }
+        .hero-stats {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            animation: fadeUp 0.8s ease-out 0.45s both;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat-number {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--gold-light);
+        }
+        .hero-stat-label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-top: 4px;
+        }
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            animation: fadeUp 0.8s ease-out 0.6s both;
+        }
+        .hero-scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(180deg, rgba(212,168,67,0.6), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+            50% { opacity: 1; transform: scaleY(1); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== SECTION HEADERS ========== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+        .section-tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .section-tag::before,
+        .section-tag::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 1px;
+            background: var(--gold);
+            opacity: 0.4;
+        }
+        .section-tag::before { right: calc(100% + 12px); }
+        .section-tag::after { left: calc(100% + 12px); }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 400;
+            color: var(--emerald-dark);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+        .section-title em {
+            font-style: italic;
+            color: var(--gold);
+        }
+        .section-desc {
+            font-size: 1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* ========== BOOKING SECTION ========== */
+        .booking-section {
+            padding: 100px 0;
+            background: var(--white);
+            position: relative;
+        }
+        .booking-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, var(--emerald-dark) 0%, transparent 100%);
+            opacity: 0.03;
+        }
+
+        .booking-form-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid rgba(184, 134, 11, 0.15);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .booking-form-header {
+            background: linear-gradient(135deg, var(--emerald) 0%, var(--emerald-dark) 100%);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .booking-form-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B8860B' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .booking-form-header h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            color: var(--white);
+            font-weight: 400;
+            position: relative;
+        }
+        .booking-form-header h2 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+        .booking-form-header p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-top: 8px;
+            position: relative;
+        }
+
+        .booking-form-body {
+            padding: 48px 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        .form-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--emerald);
+            margin-bottom: 8px;
+        }
+        .form-input {
+            padding: 14px 18px;
+            border: 2px solid var(--sand-dark);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--text);
+            transition: all var(--transition);
+            background: var(--sand-light);
+            -webkit-appearance: none;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--emerald);
+            box-shadow: 0 0 0 4px rgba(27, 94, 59, 0.1);
+            background: var(--white);
+        }
+        .form-input::placeholder { color: var(--text-muted); }
+
+        select.form-input {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B5E3B' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        /* Addons */
+        .addons-section {
+            margin-bottom: 32px;
+        }
+        .addons-title {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--emerald-dark);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--sand-dark);
+        }
+        .addon-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border: 2px solid var(--sand-dark);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            transition: all var(--transition);
+            cursor: pointer;
+            background: var(--sand-light);
+        }
+        .addon-item:hover {
+            border-color: var(--emerald-light);
+            background: var(--white);
+            transform: translateX(4px);
+        }
+        .addon-item.checked {
+            border-color: var(--emerald);
+            background: var(--emerald-pale);
+        }
+        .addon-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .addon-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--sand-dark);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+            flex-shrink: 0;
+        }
+        .addon-item.checked .addon-checkbox {
+            background: var(--emerald);
+            border-color: var(--emerald);
+        }
+        .addon-checkmark {
+            display: none;
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .addon-item.checked .addon-checkmark { display: block; }
+        .addon-icon {
+            font-size: 1.4rem;
+            width: 36px;
+            text-align: center;
+        }
+        .addon-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .addon-info p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+        .addon-price {
+            font-weight: 600;
+            color: var(--emerald);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .addon-price input[type="checkbox"] { display: none; }
+
+        /* Price Summary */
+        .price-summary {
+            background: linear-gradient(135deg, var(--emerald-dark) 0%, var(--emerald) 100%);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+        .price-summary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23B8860B' fill-opacity='0.05'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .price-summary-inner {
+            position: relative;
+        }
+        .price-summary h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+        }
+        .price-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.8);
+        }
+        .price-line.included {
+            color: rgba(255,255,255,0.5);
+        }
+        .price-line.included span:last-child {
+            font-style: italic;
+        }
+        .price-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.15);
+            margin: 12px 0;
+        }
+        .price-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0 0;
+        }
+        .price-total-label {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--white);
+        }
+        .price-total-amount {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--gold-light);
+        }
+        .price-savings {
+            background: rgba(184, 134, 11, 0.2);
+            border: 1px solid rgba(184, 134, 11, 0.3);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--gold-light);
+        }
+        .price-savings-icon {
+            font-size: 1.2rem;
+        }
+        .price-notice {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 16px;
+            text-align: center;
+            display: none;
+        }
+        .price-notice.visible { display: block; }
+
+        /* CTA Buttons */
+        .booking-ctas {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .btn-primary {
+            flex: 1;
+            min-width: 200px;
+            padding: 18px 32px;
+            background: var(--gold);
+            color: var(--white);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border-radius: 50px;
+            text-align: center;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        .btn-primary:hover::before { transform: translateX(100%); }
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(184, 134, 11, 0.4);
+        }
+        .btn-secondary {
+            flex: 1;
+            min-width: 200px;
+            padding: 18px 32px;
+            background: transparent;
+            color: var(--emerald);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            border-radius: 50px;
+            text-align: center;
+            border: 2px solid var(--emerald);
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-secondary:hover {
+            background: var(--emerald);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(27, 94, 59, 0.3);
+        }
+
+        /* ========== ROOMS SECTION ========== */
+        .rooms-section {
+            padding: 100px 0;
+            background: var(--sand-light);
+        }
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .room-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .room-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .room-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .room-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+        .room-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .room-card:hover .room-image img {
+            transform: scale(1.08);
+        }
+        .room-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--emerald);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .room-body {
+            padding: 24px;
+        }
+        .room-name {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--emerald-dark);
+            margin-bottom: 8px;
+        }
+        .room-bed {
+            font-size: 0.85rem;
+            color: var(--gold);
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        .room-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .room-feature {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            background: var(--sand);
+            padding: 4px 10px;
+            border-radius: 50px;
+        }
+
+        /* ========== SERVICES SECTION ========== */
+        .services-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .service-card {
+            background: var(--sand-light);
+            border-radius: var(--radius-md);
+            padding: 36px 28px;
+            text-align: center;
+            transition: all var(--transition);
+            border: 1px solid transparent;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .service-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            background: var(--white);
+        }
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
+            transition: transform var(--transition);
+        }
+        .service-card:hover .service-icon {
+            transform: scale(1.15) rotate(-5deg);
+        }
+        .service-name {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--emerald-dark);
+            margin-bottom: 8px;
+        }
+        .service-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .service-price {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        /* ========== INCLUDED ========== */
+        .included-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--emerald-dark) 0%, var(--emerald) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .included-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23B8860B' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .included-section .section-tag { color: var(--gold-light); }
+        .included-section .section-tag::before,
+        .included-section .section-tag::after { background: var(--gold-light); }
+        .included-section .section-title { color: var(--white); }
+        .included-section .section-title em { color: var(--gold-light); }
+        .included-section .section-desc { color: rgba(255,255,255,0.7); }
+
+        .included-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            position: relative;
+        }
+        .included-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition);
+            backdrop-filter: blur(4px);
+        }
+        .included-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(184, 134, 11, 0.3);
+            transform: translateY(-2px);
+        }
+        .included-check {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .included-text h4 {
+            color: var(--white);
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .included-text p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+
+        /* ========== CALENDAR / SEASONS ========== */
+        .calendar-section {
+            padding: 100px 0;
+            background: var(--sand-light);
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        .calendar-month {
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all var(--transition);
+            cursor: default;
+        }
+        .calendar-month:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .calendar-month-name {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+        .calendar-month-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        .calendar-month-season {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        /* Season colors */
+        .season-low {
+            border-color: #27AE60;
+        }
+        .season-low .calendar-month-price { color: #27AE60; }
+        .season-low .calendar-month-season { color: #27AE60; }
+
+        .season-mid {
+            border-color: #F39C12;
+        }
+        .season-mid .calendar-month-price { color: #F39C12; }
+        .season-mid .calendar-month-season { color: #F39C12; }
+
+        .season-high {
+            border-color: #E67E22;
+        }
+        .season-high .calendar-month-price { color: #E67E22; }
+        .season-high .calendar-month-season { color: #E67E22; }
+
+        .season-peak {
+            border-color: #C0392B;
+        }
+        .season-peak .calendar-month-price { color: #C0392B; }
+        .season-peak .calendar-month-season { color: #C0392B; }
+
+        .calendar-legend {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+        .legend-dot.low { background: #27AE60; }
+        .legend-dot.mid { background: #F39C12; }
+        .legend-dot.high { background: #E67E22; }
+        .legend-dot.peak { background: #C0392B; }
+
+        /* ========== REVIEWS ========== */
+        .reviews-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+        .reviews-hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+        .reviews-score {
+            font-family: var(--font-display);
+            font-size: 5rem;
+            font-weight: 600;
+            color: var(--emerald-dark);
+            line-height: 1;
+        }
+        .reviews-stars {
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 4px;
+            margin: 8px 0;
+        }
+        .reviews-count {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        .reviews-badges {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+        .review-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--sand);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .review-badge-icon { font-size: 1rem; }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .review-card {
+            background: var(--sand-light);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            transition: all var(--transition);
+        }
+        .review-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .review-stars {
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+        .review-text {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .review-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--emerald);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .review-author-info h5 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .review-author-info p {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* ========== LOCATION ========== */
+        .location-section {
+            padding: 100px 0;
+            background: var(--sand-light);
+        }
+        .location-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+        .location-map {
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            height: 400px;
+        }
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .location-distances {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .distance-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition);
+        }
+        .distance-item:hover {
+            transform: translateX(6px);
+            box-shadow: var(--shadow-sm);
+        }
+        .distance-icon {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 50%;
+            background: var(--emerald-pale);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+        .distance-info h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .distance-info p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* ========== FAQ ========== */
+        .faq-section {
+            padding: 100px 0;
+            background: var(--white);
+        }
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--sand-dark);
+            overflow: hidden;
+        }
+        .faq-question {
+            width: 100%;
+            text-align: left;
+            padding: 24px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            transition: color var(--transition);
+            background: transparent;
+        }
+        .faq-question:hover { color: var(--emerald); }
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--sand-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--emerald);
+            transition: all var(--transition);
+        }
+        .faq-item.active .faq-icon {
+            background: var(--emerald);
+            border-color: var(--emerald);
+            color: var(--white);
+            transform: rotate(45deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+        }
+        .faq-answer-inner {
+            padding: 0 0 24px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: var(--emerald-dark);
+            padding: 60px 0 30px;
+            color: var(--white);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 40px;
+        }
+        .footer-brand h3 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--gold-light);
+            margin-bottom: 12px;
+        }
+        .footer-brand p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            line-height: 1.7;
+        }
+        .footer-heading {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--gold-light);
+            margin-bottom: 16px;
+        }
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .footer-links a {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .footer-links a:hover {
+            color: var(--gold-light);
+            transform: translateX(4px);
+        }
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .footer-bottom p {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+        .footer-socials {
+            display: flex;
+            gap: 12px;
+        }
+        .footer-social {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            transition: all var(--transition);
+        }
+        .footer-social:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* ========== SCROLL ANIMATIONS ========== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== BACK TO TOP ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--emerald);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            background: var(--gold);
+            transform: translateY(-4px);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .rooms-grid,
+            .services-grid,
+            .reviews-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .included-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            .mobile-menu { display: flex; }
+
+            .hero-stats { gap: 24px; }
+
+            .form-grid { grid-template-columns: 1fr; }
+            .booking-form-body { padding: 32px 24px; }
+            .booking-form-header { padding: 28px 24px; }
+
+            .rooms-grid,
+            .services-grid,
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            .included-grid {
+                grid-template-columns: 1fr;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .location-grid {
+                grid-template-columns: 1fr;
+            }
+            .location-map { height: 300px; }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .booking-ctas { flex-direction: column; }
+            .btn-primary, .btn-secondary { min-width: unset; width: 100%; }
+
+            .price-summary { padding: 24px; }
+
+            .addon-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .addon-price {
+                align-self: flex-end;
+            }
+
+            .hero-scroll { display: none; }
+        }
+
+        @media (max-width: 480px) {
+            .calendar-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            .calendar-month {
+                padding: 14px 10px;
+            }
+            .calendar-month-name {
+                font-size: 1rem;
+            }
+            .hero-stat-number {
+                font-size: 1.8rem;
+            }
+            .calendar-legend {
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========== LOADER ========== -->
+<div class="loader" id="loader">
+    <div class="loader-ornament"></div>
+    <div class="loader-text">Casbah Amor</div>
+    <div class="loader-sub">Marrakech</div>
+</div>
+
+<!-- ========== NAV ========== -->
+<nav class="nav" id="nav">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">Casbah Amor</a>
+        <ul class="nav-links">
+            <li><a href="#booking">Reservation</a></li>
+            <li><a href="#rooms">Chambres</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#calendar">Tarifs</a></li>
+            <li><a href="#reviews">Avis</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#booking" class="nav-cta">Reserver</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#booking" class="mobile-link">Reservation</a>
+    <a href="#rooms" class="mobile-link">Chambres</a>
+    <a href="#services" class="mobile-link">Services</a>
+    <a href="#calendar" class="mobile-link">Tarifs</a>
+    <a href="#reviews" class="mobile-link">Avis</a>
+    <a href="#faq" class="mobile-link">FAQ</a>
+    <a href="#booking" class="mobile-link" style="color: var(--gold-light);">Reserver</a>
+</div>
+
+<!-- ========== HERO ========== -->
+<section class="hero" id="hero">
+    <div class="hero-bg">
+        <img src="images/hero.jpg" alt="Casbah Amor - Riad de luxe a Marrakech" loading="eager">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="star">&#9733;</span>
+            4.94/5 &middot; Superhote &middot; 18 avis
+        </div>
+        <h1 class="hero-title">Reservez Votre Sejour<br>au <em>Casbah Amor</em></h1>
+        <p class="hero-subtitle">Riad de luxe exclusif au coeur de la Medina de Marrakech.<br>6 chambres, piscine chauffee sur le rooftop, jusqu'a 13 voyageurs.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-number">6</div>
+                <div class="hero-stat-label">Chambres</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">13</div>
+                <div class="hero-stat-label">Voyageurs</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">6.5</div>
+                <div class="hero-stat-label">Salles de bain</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-number">500&#8364;</div>
+                <div class="hero-stat-label">A partir de / nuit</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <span>Defiler</span>
+        <div class="hero-scroll-line"></div>
+    </div>
+</section>
+
+<!-- ========== BOOKING SECTION ========== -->
+<section class="booking-section" id="booking">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">Reservation</span>
+            <h2 class="section-title">Privatisez le <em>Casbah Amor</em></h2>
+            <p class="section-desc">Estimez le cout de votre sejour et reservez via Airbnb ou Booking.com. Minimum 2 nuits.</p>
+        </div>
+
+        <div class="booking-form-container reveal">
+            <div class="booking-form-header">
+                <h2>Calculez votre <em>sejour</em></h2>
+                <p>Les tarifs s'adaptent automatiquement a la saison</p>
+            </div>
+            <div class="booking-form-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="checkin">Date d'arrivee</label>
+                        <input type="date" id="checkin" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="checkout">Date de depart</label>
+                        <input type="date" id="checkout" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="guests">Nombre de voyageurs</label>
+                        <select id="guests" class="form-input">
+                            <option value="1">1 voyageur</option>
+                            <option value="2" selected>2 voyageurs</option>
+                            <option value="3">3 voyageurs</option>
+                            <option value="4">4 voyageurs</option>
+                            <option value="5">5 voyageurs</option>
+                            <option value="6">6 voyageurs</option>
+                            <option value="7">7 voyageurs</option>
+                            <option value="8">8 voyageurs</option>
+                            <option value="9">9 voyageurs</option>
+                            <option value="10">10 voyageurs</option>
+                            <option value="11">11 voyageurs</option>
+                            <option value="12">12 voyageurs</option>
+                            <option value="13">13 voyageurs</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Saison detectee</label>
+                        <div class="form-input" id="seasonDisplay" style="background: var(--emerald-pale); color: var(--emerald); font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            <span id="seasonDot" style="width:10px;height:10px;border-radius:50%;background:#27AE60;display:inline-block;"></span>
+                            <span id="seasonText">Selectionnez vos dates</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add-ons -->
+                <div class="addons-section">
+                    <h3 class="addons-title">Services optionnels</h3>
+
+                    <div class="addon-item" onclick="toggleAddon(this, 'breakfast')">
+                        <input type="checkbox" id="addon-breakfast" style="display:none;">
+                        <div class="addon-left">
+                            <div class="addon-checkbox"><span class="addon-checkmark">&#10003;</span></div>
+                            <div class="addon-icon">&#127836;</div>
+                            <div class="addon-info">
+                                <h4>Petit-dejeuner marocain</h4>
+                                <p>Msemen, baghrir, jus frais, fruits, confitures... chaque matin</p>
+                            </div>
+                        </div>
+                        <div class="addon-price">12&#8364;/pers/jour</div>
+                    </div>
+
+                    <div class="addon-item" onclick="toggleAddon(this, 'pool')">
+                        <input type="checkbox" id="addon-pool" style="display:none;">
+                        <div class="addon-left">
+                            <div class="addon-checkbox"><span class="addon-checkmark">&#10003;</span></div>
+                            <div class="addon-icon">&#127946;</div>
+                            <div class="addon-info">
+                                <h4>Piscine chauffee</h4>
+                                <p>Profitez de la piscine chauffee sur le rooftop toute la journee</p>
+                            </div>
+                        </div>
+                        <div class="addon-price">38&#8364;/jour</div>
+                    </div>
+
+                    <div class="addon-item" onclick="toggleAddon(this, 'transfer_in')">
+                        <input type="checkbox" id="addon-transfer_in" style="display:none;">
+                        <div class="addon-left">
+                            <div class="addon-checkbox"><span class="addon-checkmark">&#10003;</span></div>
+                            <div class="addon-icon">&#9992;&#65039;</div>
+                            <div class="addon-info">
+                                <h4>Transfert aeroport aller</h4>
+                                <p>Chauffeur prive de l'aeroport au riad</p>
+                            </div>
+                        </div>
+                        <div class="addon-price">20&#8364;</div>
+                    </div>
+
+                    <div class="addon-item" onclick="toggleAddon(this, 'transfer_out')">
+                        <input type="checkbox" id="addon-transfer_out" style="display:none;">
+                        <div class="addon-left">
+                            <div class="addon-checkbox"><span class="addon-checkmark">&#10003;</span></div>
+                            <div class="addon-icon">&#9992;&#65039;</div>
+                            <div class="addon-info">
+                                <h4>Transfert aeroport retour</h4>
+                                <p>Chauffeur prive du riad a l'aeroport</p>
+                            </div>
+                        </div>
+                        <div class="addon-price">20&#8364;</div>
+                    </div>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="price-summary" id="priceSummary">
+                    <div class="price-summary-inner">
+                        <h3>Recapitulatif</h3>
+                        <div id="priceLines">
+                            <div class="price-line" style="color: rgba(255,255,255,0.5); font-style: italic;">
+                                Selectionnez vos dates pour voir le devis
+                            </div>
+                        </div>
+                        <div class="price-divider" id="priceDivider" style="display:none;"></div>
+                        <div class="price-total" id="priceTotal" style="display:none;">
+                            <span class="price-total-label">Total</span>
+                            <span class="price-total-amount" id="totalAmount">0&#8364;</span>
+                        </div>
+                        <div class="price-savings" id="priceSavings" style="display:none;">
+                            <span class="price-savings-icon">&#128176;</span>
+                            <span id="savingsText"></span>
+                        </div>
+                        <div class="price-notice" id="priceNotice">Minimum 2 nuits requises</div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="booking-ctas" id="bookingCtas">
+                    <a href="https://www.airbnb.fr/rooms/1478200670415261868" id="airbnbBookBtn" class="btn-primary" target="_blank" rel="noopener">
+                        &#127968; Reserver sur Airbnb
+                    </a>
+                    <a href="https://www.booking.com/hotel/ma/casbah-amor-rooftop-with-pool-amp-air-conditioning.fr.html" class="btn-secondary" target="_blank" rel="noopener">
+                        Voir sur Booking.com &#8594;
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== ROOMS ========== -->
+<section class="rooms-section" id="rooms">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">6 Chambres</span>
+            <h2 class="section-title">Un ecrin de <em>raffinement</em></h2>
+            <p class="section-desc">Chaque chambre est unique, decoree avec soin par un architecte d'interieur alliant tradition marocaine et luxe contemporain.</p>
+        </div>
+
+        <div class="rooms-grid">
+            <div class="room-card reveal">
+                <div class="room-image">
+                    <img src="images/airbnb-new/airbnb-01.jpeg" alt="Suite Royale - Casbah Amor" loading="lazy">
+                    <span class="room-badge">Suite</span>
+                </div>
+                <div class="room-body">
+                    <h3 class="room-name">Suite Royale</h3>
+                    <p class="room-bed">King 160x200</p>
+                    <div class="room-features">
+                        <span class="room-feature">SdB privee</span>
+                        <span class="room-feature">Tadelakt dore</span>
+                        <span class="room-feature">Clim</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card reveal">
+                <div class="room-image">
+                    <img src="images/airbnb-new/airbnb-10.jpeg" alt="Chambre Emeraude - Casbah Amor" loading="lazy">
+                </div>
+                <div class="room-body">
+                    <h3 class="room-name">Chambre Emeraude</h3>
+                    <p class="room-bed">Double 140x200</p>
+                    <div class="room-features">
+                        <span class="room-feature">Vue patio</span>
+                        <span class="room-feature">SdB zellige</span>
+                        <span class="room-feature">Clim</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card reveal">
+                <div class="room-image">
+                    <img src="images/airbnb-new/airbnb-20.jpeg" alt="Chambre Ambre - Casbah Amor" loading="lazy">
+                </div>
+                <div class="room-body">
+                    <h3 class="room-name">Chambre Ambre</h3>
+                    <p class="room-bed">Double 140x200</p>
+                    <div class="room-features">
+                        <span class="room-feature">Art contemporain</span>
+                        <span class="room-feature">SdB privee</span>
+                        <span class="room-feature">Clim</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card reveal">
+                <div class="room-image">
+                    <img src="images/airbnb-new/airbnb-30.jpeg" alt="Chambre Saphir - Casbah Amor" loading="lazy">
+                </div>
+                <div class="room-body">
+                    <h3 class="room-name">Chambre Saphir</h3>
+                    <p class="room-bed">Double 140x200</p>
+                    <div class="room-features">
+                        <span class="room-feature">Decor traditionnel</span>
+                        <span class="room-feature">SdB privee</span>
+                        <span class="room-feature">Clim</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card reveal">
+                <div class="room-image">
+                    <img src="images/airbnb-new/airbnb-40.jpeg" alt="Suite Diamant - Casbah Amor" loading="lazy">
+                    <span class="room-badge">Suite</span>
+                </div>
+                <div class="room-body">
+                    <h3 class="room-name">Suite Diamant</h3>
+                    <p class="room-bed">King 160x200</p>
+                    <div class="room-features">
+                        <span class="room-feature">Terrasse privee</span>
+                        <span class="room-feature">SdB premium</span>
+                        <span class="room-feature">Clim</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="room-card reveal">
+                <div class="room-image">
+                    <img src="images/airbnb-new/airbnb-50.jpeg" alt="Chambre Perle - Casbah Amor" loading="lazy">
+                </div>
+                <div class="room-body">
+                    <h3 class="room-name">Chambre Perle</h3>
+                    <p class="room-bed">Simple 90x200</p>
+                    <div class="room-features">
+                        <span class="room-feature">Cosy</span>
+                        <span class="room-feature">SdB privee</span>
+                        <span class="room-feature">Clim</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section class="services-section" id="services">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">Sur mesure</span>
+            <h2 class="section-title">Services & <em>Extras</em></h2>
+            <p class="section-desc">Composez votre sejour ideal avec nos services optionnels, reserves a la demande apres votre reservation.</p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <span class="service-icon">&#127836;</span>
+                <h3 class="service-name">Petit-dejeuner</h3>
+                <p class="service-desc">Msemen, baghrir, crepes, jus d'orange frais, fruits de saison, confitures maison, oeufs, cafe et the a la menthe.</p>
+                <p class="service-price">12&#8364; / personne / jour</p>
+            </div>
+
+            <div class="service-card reveal">
+                <span class="service-icon">&#127859;</span>
+                <h3 class="service-name">Chef prive</h3>
+                <p class="service-desc">Un chef marocain a demeure pour preparer des repas authentiques — tajines, couscous, pastilla, mechoui et plus encore.</p>
+                <p class="service-price">Sur devis</p>
+            </div>
+
+            <div class="service-card reveal">
+                <span class="service-icon">&#127946;</span>
+                <h3 class="service-name">Piscine chauffee</h3>
+                <p class="service-desc">Profitez de la piscine chauffee sur le rooftop avec vue panoramique. Rare dans la medina, un veritable privilege.</p>
+                <p class="service-price">38&#8364; / jour</p>
+            </div>
+
+            <div class="service-card reveal">
+                <span class="service-icon">&#9992;&#65039;</span>
+                <h3 class="service-name">Transfert aeroport</h3>
+                <p class="service-desc">Chauffeur prive entre l'aeroport Marrakech-Menara et le riad. Accueil personnalise a votre arrivee.</p>
+                <p class="service-price">20&#8364; / trajet</p>
+            </div>
+
+            <div class="service-card reveal">
+                <span class="service-icon">&#128134;</span>
+                <h3 class="service-name">Massage & soins</h3>
+                <p class="service-desc">Massages et soins bien-etre directement au riad. Huile d'argan, gommage au savon noir, hammam traditionnel.</p>
+                <p class="service-price">Sur devis</p>
+            </div>
+
+            <div class="service-card reveal">
+                <span class="service-icon">&#127956;&#65039;</span>
+                <h3 class="service-name">Excursions</h3>
+                <p class="service-desc">Atlas, Essaouira, desert d'Agafay, cascades d'Ouzoud... des escapades inoubliables organisees sur mesure.</p>
+                <p class="service-price">Sur devis</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== INCLUDED ========== -->
+<section class="included-section" id="included">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">Sans supplement</span>
+            <h2 class="section-title">Inclus dans votre <em>sejour</em></h2>
+            <p class="section-desc">Tout ce dont vous avez besoin est deja la, pour un sejour sans souci.</p>
+        </div>
+
+        <div class="included-grid">
+            <div class="included-item reveal">
+                <div class="included-check">&#10003;</div>
+                <div class="included-text">
+                    <h4>Menage quotidien</h4>
+                    <p>Service de menage chaque jour de 11h a 15h</p>
+                </div>
+            </div>
+            <div class="included-item reveal">
+                <div class="included-check">&#10003;</div>
+                <div class="included-text">
+                    <h4>Wi-Fi haut debit</h4>
+                    <p>Connexion rapide dans tout le riad</p>
+                </div>
+            </div>
+            <div class="included-item reveal">
+                <div class="included-check">&#10003;</div>
+                <div class="included-text">
+                    <h4>Climatisation & chauffage</h4>
+                    <p>Confort optimal en toute saison</p>
+                </div>
+            </div>
+            <div class="included-item reveal">
+                <div class="included-check">&#10003;</div>
+                <div class="included-text">
+                    <h4>Arrivee autonome</h4>
+                    <p>Serrure connectee, arrivez quand vous voulez</p>
+                </div>
+            </div>
+            <div class="included-item reveal">
+                <div class="included-check">&#10003;</div>
+                <div class="included-text">
+                    <h4>Linge premium</h4>
+                    <p>Draps, serviettes et articles de toilette haut de gamme</p>
+                </div>
+            </div>
+            <div class="included-item reveal">
+                <div class="included-check">&#10003;</div>
+                <div class="included-text">
+                    <h4>Cuisine equipee</h4>
+                    <p>Cuisine complete a votre disposition</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== SEASONAL CALENDAR ========== -->
+<section class="calendar-section" id="calendar">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">Tarifs 2026</span>
+            <h2 class="section-title">Choisissez la <em>meilleure saison</em></h2>
+            <p class="section-desc">Les tarifs varient selon la saison. Riad entier privatise, minimum 2 nuits.</p>
+        </div>
+
+        <div class="calendar-grid reveal">
+            <div class="calendar-month season-high">
+                <div class="calendar-month-name">Janvier</div>
+                <div class="calendar-month-price">761&#8364;/nuit</div>
+                <div class="calendar-month-season">Haute saison</div>
+            </div>
+            <div class="calendar-month season-high">
+                <div class="calendar-month-name">Fevrier</div>
+                <div class="calendar-month-price">761&#8364;/nuit</div>
+                <div class="calendar-month-season">Haute saison</div>
+            </div>
+            <div class="calendar-month season-mid">
+                <div class="calendar-month-name">Mars</div>
+                <div class="calendar-month-price">650&#8364;/nuit</div>
+                <div class="calendar-month-season">Moyenne saison</div>
+            </div>
+            <div class="calendar-month season-high">
+                <div class="calendar-month-name">Avril</div>
+                <div class="calendar-month-price">761&#8364;/nuit</div>
+                <div class="calendar-month-season">Haute saison</div>
+            </div>
+            <div class="calendar-month season-high">
+                <div class="calendar-month-name">Mai</div>
+                <div class="calendar-month-price">761&#8364;/nuit</div>
+                <div class="calendar-month-season">Haute saison</div>
+            </div>
+            <div class="calendar-month season-low">
+                <div class="calendar-month-name">Juin</div>
+                <div class="calendar-month-price">500&#8364;/nuit</div>
+                <div class="calendar-month-season">Basse saison</div>
+            </div>
+            <div class="calendar-month season-low">
+                <div class="calendar-month-name">Juillet</div>
+                <div class="calendar-month-price">500&#8364;/nuit</div>
+                <div class="calendar-month-season">Basse saison</div>
+            </div>
+            <div class="calendar-month season-low">
+                <div class="calendar-month-name">Aout</div>
+                <div class="calendar-month-price">500&#8364;/nuit</div>
+                <div class="calendar-month-season">Basse saison</div>
+            </div>
+            <div class="calendar-month season-low">
+                <div class="calendar-month-name">Septembre</div>
+                <div class="calendar-month-price">500&#8364;/nuit</div>
+                <div class="calendar-month-season">Basse saison</div>
+            </div>
+            <div class="calendar-month season-mid">
+                <div class="calendar-month-name">Octobre</div>
+                <div class="calendar-month-price">650&#8364;/nuit</div>
+                <div class="calendar-month-season">Moyenne saison</div>
+            </div>
+            <div class="calendar-month season-mid">
+                <div class="calendar-month-name">Novembre</div>
+                <div class="calendar-month-price">650&#8364;/nuit</div>
+                <div class="calendar-month-season">Moyenne saison</div>
+            </div>
+            <div class="calendar-month season-peak">
+                <div class="calendar-month-name">Decembre</div>
+                <div class="calendar-month-price">900&#8364;/nuit</div>
+                <div class="calendar-month-season">Pic (Noel / Nouvel An)</div>
+            </div>
+        </div>
+
+        <div class="calendar-legend reveal">
+            <div class="legend-item">
+                <div class="legend-dot low"></div>
+                <span>Basse saison (500&#8364;)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot mid"></div>
+                <span>Moyenne saison (650&#8364;)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot high"></div>
+                <span>Haute saison (761&#8364;)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot peak"></div>
+                <span>Pic (900&#8364;)</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== REVIEWS ========== -->
+<section class="reviews-section" id="reviews">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">Temoignages</span>
+            <h2 class="section-title">Ce qu'en disent <em>nos hotes</em></h2>
+        </div>
+
+        <div class="reviews-hero reveal">
+            <div class="reviews-score">4.94</div>
+            <div class="reviews-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <div class="reviews-count">18 avis verifies sur Airbnb</div>
+            <div class="reviews-badges">
+                <div class="review-badge">
+                    <span class="review-badge-icon">&#127942;</span>
+                    Coup de coeur voyageurs
+                </div>
+                <div class="review-badge">
+                    <span class="review-badge-icon">&#11088;</span>
+                    Superhote
+                </div>
+                <div class="review-badge">
+                    <span class="review-badge-icon">&#128274;</span>
+                    Arrivee autonome
+                </div>
+                <div class="review-badge">
+                    <span class="review-badge-icon">&#128172;</span>
+                    Repond en moins d'1h
+                </div>
+            </div>
+        </div>
+
+        <div class="reviews-grid">
+            <div class="review-card reveal">
+                <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="review-text">"Excellent sejour, les instructions etaient claires rendant l'arrivee autonome facile et agreable."</p>
+                <div class="review-author">
+                    <div class="review-avatar">E</div>
+                    <div class="review-author-info">
+                        <h5>Emma</h5>
+                        <p>Airbnb</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="review-text">"Fabuleux Riad ! Anniversaire en compagnie de 10 copines toutes aussi ravies que moi !"</p>
+                <div class="review-author">
+                    <div class="review-avatar">M</div>
+                    <div class="review-author-info">
+                        <h5>Maagano</h5>
+                        <p>Airbnb</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="review-text">"Le riad est magnifique et a une veritable ambiance d'hotel de luxe. Les touches personnelles, cadeaux de Saint-Valentin et fleurs a l'arrivee."</p>
+                <div class="review-author">
+                    <div class="review-avatar">L</div>
+                    <div class="review-author-info">
+                        <h5>Laveena</h5>
+                        <p>Airbnb</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="review-text">"L'endroit etait impeccable, les lits extremement confortables et une intimite parfaite."</p>
+                <div class="review-author">
+                    <div class="review-avatar">P</div>
+                    <div class="review-author-info">
+                        <h5>Patrice</h5>
+                        <p>Airbnb</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="review-card reveal">
+                <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="review-text">"Un choix ideal pour une reunion de famille."</p>
+                <div class="review-author">
+                    <div class="review-avatar">A</div>
+                    <div class="review-author-info">
+                        <h5>Ambre</h5>
+                        <p>Booking.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== LOCATION ========== -->
+<section class="location-section" id="location">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">Emplacement</span>
+            <h2 class="section-title">Au coeur de la <em>Medina</em></h2>
+            <p class="section-desc">Un emplacement central, sur et accessible a pied pour decouvrir tous les tresors de Marrakech.</p>
+        </div>
+
+        <div class="location-grid reveal">
+            <div class="location-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3397.1!2d-8.0011!3d31.6324!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDM3JzU2LjYiTiA4wrAwMCcwMy45Ilc!5e0!3m2!1sfr!2sma!4v1678886400000!5m2!1sfr!2sma" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation Casbah Amor Marrakech"></iframe>
+            </div>
+            <div class="location-distances">
+                <div class="distance-item">
+                    <div class="distance-icon">&#127979;</div>
+                    <div class="distance-info">
+                        <h4>Place Jemaa el-Fna</h4>
+                        <p>10 minutes a pied</p>
+                    </div>
+                </div>
+                <div class="distance-item">
+                    <div class="distance-icon">&#128332;</div>
+                    <div class="distance-info">
+                        <h4>Mosquee Koutoubia</h4>
+                        <p>400 metres</p>
+                    </div>
+                </div>
+                <div class="distance-item">
+                    <div class="distance-icon">&#9992;&#65039;</div>
+                    <div class="distance-info">
+                        <h4>Aeroport Marrakech-Menara</h4>
+                        <p>15 minutes en voiture</p>
+                    </div>
+                </div>
+                <div class="distance-item">
+                    <div class="distance-icon">&#127860;</div>
+                    <div class="distance-info">
+                        <h4>Gueliz & Hivernage</h4>
+                        <p>Acces rapide - restaurants et vie nocturne</p>
+                    </div>
+                </div>
+                <div class="distance-item">
+                    <div class="distance-icon">&#127981;</div>
+                    <div class="distance-info">
+                        <h4>La Mamounia</h4>
+                        <p>10 minutes a pied</p>
+                    </div>
+                </div>
+                <div class="distance-item">
+                    <div class="distance-icon">&#128717;</div>
+                    <div class="distance-info">
+                        <h4>Souks de la Medina</h4>
+                        <p>Quartier central, acces direct a pied</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section class="faq-section" id="faq">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-tag">Questions frequentes</span>
+            <h2 class="section-title">Tout ce que vous devez <em>savoir</em></h2>
+        </div>
+
+        <div class="faq-list reveal">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Comment reserver le Casbah Amor ?
+                    <div class="faq-icon">+</div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Vous pouvez reserver via notre annonce Airbnb ou via Booking.com pour une reservation securisee. Mehdi, votre hote Superhote, repond dans l'heure en moyenne. Contactez-le directement via la messagerie Airbnb pour toute question.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Quelle est la politique d'annulation ?
+                    <div class="faq-icon">+</div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Annulation gratuite avant une certaine date (variable selon les dates du sejour), puis remboursement partiel ensuite. Consultez les conditions exactes sur l'annonce Airbnb ou Booking.com au moment de votre reservation. Contactez Mehdi via la messagerie Airbnb pour toute question.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Y a-t-il un parking disponible ?
+                    <div class="faq-icon">+</div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Oui, un parking securise est disponible a 3 minutes a pied du riad pour seulement 1&#8364; par jour, payable directement sur place. Ideal si vous louez une voiture.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Le riad est-il adapte aux enfants ?
+                    <div class="faq-icon">+</div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Le riad ne convient pas aux enfants et bebes. C'est un espace de luxe concu pour les adultes et groupes. La piscine sur le rooftop et l'architecture du riad ne sont pas adaptees aux jeunes enfants. Capacite maximale : 13 voyageurs.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Peut-on organiser des evenements au riad ?
+                    <div class="faq-icon">+</div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Oui, le Casbah Amor est ideal pour les anniversaires, enterrements de vie de jeune fille/garcon, reunions de famille et petits evenements prives (jusqu'a 13 personnes). Un chef prive peut etre mis a disposition. Contactez-nous pour organiser votre evenement sur mesure.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Quels sont les horaires de check-in / check-out ?
+                    <div class="faq-icon">+</div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Arrivee (check-in) a partir de 15h00. Depart (check-out) avant 11h00. Grace a la serrure connectee, l'arrivee est 100% autonome : vous recevez un code d'acces et pouvez entrer a l'heure qui vous convient dans le creneau d'arrivee.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Comment fonctionne le petit-dejeuner ?
+                    <div class="faq-icon">+</div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Le petit-dejeuner marocain (12&#8364;/personne/jour) est servi chaque matin au riad. Il comprend des specialites marocaines : msemen, baghrir, crepes, jus d'orange presse, fruits frais, confitures maison, oeufs, cafe et the a la menthe. A reserver au moment de la reservation ou sur place.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ========== CTA BANNER ========== -->
+<section style="padding: 80px 0; background: linear-gradient(135deg, var(--emerald-dark) 0%, var(--emerald) 100%); text-align: center; position: relative; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background: url('data:image/svg+xml,%3Csvg width=\'80\' height=\'80\' viewBox=\'0 0 80 80\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23B8860B\' fill-opacity=\'0.04\'%3E%3Cpath d=\'M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 0 0-30 15 15 0 0 0 0 30z\'/%3E%3C/g%3E%3C/svg%3E');"></div>
+    <div class="container" style="position: relative;">
+        <h2 style="font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); color: var(--white); font-weight: 400; margin-bottom: 16px;">Pret pour une <em style="font-style: italic; color: var(--gold-light);">experience inoubliable</em> ?</h2>
+        <p style="color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 32px;">Rejoignez les voyageurs qui ont donne 4.94/5 au Casbah Amor</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <a href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank" rel="noopener" style="padding: 18px 40px; background: var(--gold); color: var(--white); border-radius: 50px; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.05em; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;">&#127968; Reserver sur Airbnb</a>
+            <a href="https://www.instagram.com/casbah_amor/" target="_blank" rel="noopener" style="padding: 18px 40px; border: 2px solid rgba(255,255,255,0.3); color: var(--white); border-radius: 50px; font-weight: 600; font-size: 0.9rem; letter-spacing: 0.05em; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;">Suivez-nous sur Instagram</a>
+        </div>
+    </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer" id="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>Casbah Amor</h3>
+                <p>Riad de luxe exclusif au coeur de la Medina de Marrakech. 6 chambres, piscine chauffee sur le rooftop, decoration d'exception. Hote : Mehdi, Superhote Airbnb (8 mois, taux de reponse 100%, repond dans l'heure). Francais, Anglais.</p>
+            </div>
+            <div>
+                <h4 class="footer-heading">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="#booking">Reservation</a></li>
+                    <li><a href="#rooms">Chambres</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#calendar">Tarifs</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-heading">Contact</h4>
+                <ul class="footer-links">
+                    <li><a href="https://www.instagram.com/casbah_amor/" target="_blank" rel="noopener">&#128247; Instagram @casbah_amor</a></li>
+                    <li><a href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank" rel="noopener">&#127968; Airbnb</a></li>
+                    <li><a href="https://www.booking.com/hotel/ma/casbah-amor-rooftop-with-pool-amp-air-conditioning.fr.html" target="_blank" rel="noopener">&#127991; Booking.com</a></li>
+                    <li><a href="index.html">&#127758; Site principal</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025-2026 Casbah Amor. 3 Rue Mohamed El Mellakh, 40000 Marrakech, Maroc.</p>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/casbah_amor/" target="_blank" rel="noopener" class="footer-social" title="Instagram">&#128247;</a>
+                <a href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank" rel="noopener" class="footer-social" title="Airbnb">&#127968;</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ========== BACK TO TOP ========== -->
+<button class="back-to-top" id="backToTop" aria-label="Retour en haut" onclick="window.scrollTo({top:0, behavior:'smooth'})">&#8593;</button>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+(function() {
+    'use strict';
+
+    // ===== LOADER =====
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.getElementById('loader').classList.add('hidden');
+        }, 800);
+    });
+
+    // ===== NAV SCROLL =====
+    var nav = document.getElementById('nav');
+    var backToTop = document.getElementById('backToTop');
+    var lastScroll = 0;
+
+    window.addEventListener('scroll', function() {
+        var scrollY = window.pageYOffset;
+        if (scrollY > 50) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+        if (scrollY > 600) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+        lastScroll = scrollY;
+    });
+
+    // ===== HAMBURGER =====
+    var hamburger = document.getElementById('hamburger');
+    var mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', function() {
+        hamburger.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.mobile-link').forEach(function(link) {
+        link.addEventListener('click', function() {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // ===== INTERSECTION OBSERVER (scroll animations) =====
+    var observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                // Stagger children animations for room-card and service-card
+                var delay = 0;
+                if (entry.target.classList.contains('rooms-grid') || entry.target.classList.contains('services-grid')) {
+                    entry.target.querySelectorAll('.room-card, .service-card').forEach(function(child, i) {
+                        setTimeout(function() {
+                            child.classList.add('visible');
+                        }, i * 100);
+                    });
+                }
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .room-card, .service-card').forEach(function(el) {
+        observer.observe(el);
+    });
+
+    // ===== SEASON DETECTION =====
+    function getSeason(date) {
+        var month = date.getMonth(); // 0-based
+        var day = date.getDate();
+
+        // Pic: December (Noel/Nouvel An)
+        if (month === 11) return { name: 'Pic (Noel / Nouvel An)', price: 900, color: '#C0392B', key: 'peak' };
+
+        // Haute saison: Dec, Jan, Feb, Apr, May
+        if (month === 0 || month === 1 || month === 3 || month === 4) return { name: 'Haute saison', price: 761, color: '#E67E22', key: 'high' };
+
+        // Moyenne saison: Oct, Nov, Mar
+        if (month === 2 || month === 9 || month === 10) return { name: 'Moyenne saison', price: 650, color: '#F39C12', key: 'mid' };
+
+        // Basse saison: Jun, Jul, Aug, Sep
+        return { name: 'Basse saison', price: 500, color: '#27AE60', key: 'low' };
+    }
+
+    // ===== PRICE CALCULATOR =====
+    var checkinInput = document.getElementById('checkin');
+    var checkoutInput = document.getElementById('checkout');
+    var guestsInput = document.getElementById('guests');
+    var seasonText = document.getElementById('seasonText');
+    var seasonDot = document.getElementById('seasonDot');
+    var priceLines = document.getElementById('priceLines');
+    var priceDivider = document.getElementById('priceDivider');
+    var priceTotal = document.getElementById('priceTotal');
+    var totalAmount = document.getElementById('totalAmount');
+    var priceSavings = document.getElementById('priceSavings');
+    var savingsText = document.getElementById('savingsText');
+    var priceNotice = document.getElementById('priceNotice');
+    var airbnbBookBtn = document.getElementById('airbnbBookBtn');
+
+    // Set min date to today
+    var today = new Date();
+    var todayStr = today.toISOString().split('T')[0];
+    checkinInput.min = todayStr;
+    checkoutInput.min = todayStr;
+
+    // Active addons tracking
+    var addons = {
+        breakfast: false,
+        pool: false,
+        transfer_in: false,
+        transfer_out: false
+    };
+
+    window.toggleAddon = function(el, key) {
+        addons[key] = !addons[key];
+        el.classList.toggle('checked');
+        calculatePrice();
+    };
+
+    // Auto-set checkout min when checkin changes
+    checkinInput.addEventListener('change', function() {
+        var checkin = new Date(checkinInput.value);
+        var minCheckout = new Date(checkin);
+        minCheckout.setDate(minCheckout.getDate() + 2); // minimum 2 nights
+        checkoutInput.min = checkinInput.value;
+        if (!checkoutInput.value || new Date(checkoutInput.value) <= checkin) {
+            checkoutInput.value = minCheckout.toISOString().split('T')[0];
+        }
+        calculatePrice();
+    });
+
+    checkoutInput.addEventListener('change', calculatePrice);
+    guestsInput.addEventListener('change', calculatePrice);
+
+    function calculatePrice() {
+        var checkin = checkinInput.value;
+        var checkout = checkoutInput.value;
+        var guests = parseInt(guestsInput.value);
+
+        if (!checkin || !checkout) {
+            seasonText.textContent = 'Selectionnez vos dates';
+            seasonDot.style.background = '#27AE60';
+            priceLines.innerHTML = '<div class="price-line" style="color: rgba(255,255,255,0.5); font-style: italic;">Selectionnez vos dates pour voir le devis</div>';
+            priceDivider.style.display = 'none';
+            priceTotal.style.display = 'none';
+            priceSavings.style.display = 'none';
+            priceNotice.classList.remove('visible');
+            return;
+        }
+
+        var checkinDate = new Date(checkin);
+        var checkoutDate = new Date(checkout);
+
+        if (checkoutDate <= checkinDate) {
+            seasonText.textContent = 'Date de depart invalide';
+            seasonDot.style.background = '#C0392B';
+            return;
+        }
+
+        // Calculate nights considering potential season changes
+        var totalNights = Math.round((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+
+        if (totalNights < 2) {
+            seasonText.textContent = 'Minimum 2 nuits requises';
+            seasonDot.style.background = '#C0392B';
+            priceNotice.classList.add('visible');
+            priceLines.innerHTML = '<div class="price-line" style="color: rgba(255,255,255,0.5);">Minimum 2 nuits requises</div>';
+            priceDivider.style.display = 'none';
+            priceTotal.style.display = 'none';
+            priceSavings.style.display = 'none';
+            return;
+        }
+
+        priceNotice.classList.remove('visible');
+
+        // Calculate total accommodation by iterating each night
+        var accommodationTotal = 0;
+        var nightsByPrice = {};
+        var currentDate = new Date(checkinDate);
+
+        for (var i = 0; i < totalNights; i++) {
+            var season = getSeason(currentDate);
+            var price = season.price;
+            if (!nightsByPrice[price]) {
+                nightsByPrice[price] = { count: 0, season: season };
+            }
+            nightsByPrice[price].count++;
+            accommodationTotal += price;
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        // Detect primary season (most common)
+        var primarySeason = getSeason(checkinDate);
+        seasonText.textContent = primarySeason.name + ' - ' + primarySeason.price + '\u20AC/nuit';
+        seasonDot.style.background = primarySeason.color;
+
+        // Build price lines
+        var html = '';
+
+        // Accommodation lines
+        var priceKeys = Object.keys(nightsByPrice).sort(function(a, b) { return b - a; });
+        if (priceKeys.length === 1) {
+            html += '<div class="price-line"><span>Hebergement : ' + totalNights + ' nuit' + (totalNights > 1 ? 's' : '') + ' x ' + priceKeys[0] + '\u20AC</span><span>' + accommodationTotal + '\u20AC</span></div>';
+        } else {
+            priceKeys.forEach(function(price) {
+                var info = nightsByPrice[price];
+                html += '<div class="price-line"><span>' + info.count + ' nuit' + (info.count > 1 ? 's' : '') + ' ' + info.season.name + ' x ' + price + '\u20AC</span><span>' + (info.count * parseInt(price)) + '\u20AC</span></div>';
+            });
+        }
+
+        // Add-ons
+        var addonsTotal = 0;
+
+        if (addons.breakfast) {
+            var breakfastCost = 12 * guests * totalNights;
+            addonsTotal += breakfastCost;
+            html += '<div class="price-line"><span>Petit-dejeuner (' + guests + ' pers x ' + totalNights + ' jours)</span><span>' + breakfastCost + '\u20AC</span></div>';
+        }
+
+        if (addons.pool) {
+            var poolCost = 38 * totalNights;
+            addonsTotal += poolCost;
+            html += '<div class="price-line"><span>Piscine chauffee (' + totalNights + ' jours)</span><span>' + poolCost + '\u20AC</span></div>';
+        }
+
+        if (addons.transfer_in) {
+            addonsTotal += 20;
+            html += '<div class="price-line"><span>Transfert aeroport aller</span><span>20\u20AC</span></div>';
+        }
+
+        if (addons.transfer_out) {
+            addonsTotal += 20;
+            html += '<div class="price-line"><span>Transfert aeroport retour</span><span>20\u20AC</span></div>';
+        }
+
+        // Included
+        html += '<div class="price-line included"><span>Menage quotidien</span><span>Inclus</span></div>';
+        html += '<div class="price-line included"><span>Wi-Fi, clim, linge</span><span>Inclus</span></div>';
+
+        priceLines.innerHTML = html;
+        priceDivider.style.display = 'block';
+        priceTotal.style.display = 'flex';
+
+        var grandTotal = accommodationTotal + addonsTotal;
+        totalAmount.textContent = grandTotal.toLocaleString('fr-FR') + '\u20AC';
+
+        // Airbnb comparison (Airbnb adds ~15-18% service fees)
+        var airbnbFees = Math.round(accommodationTotal * 0.16);
+        var airbnbTotal = grandTotal + airbnbFees;
+        var savingsPercent = Math.round((airbnbFees / airbnbTotal) * 100);
+
+        savingsText.textContent = 'Prix estime hors frais de service des plateformes. Le tarif final peut varier selon la plateforme de reservation choisie.';
+        priceSavings.style.display = 'flex';
+
+        // Airbnb booking link stays static
+        airbnbBookBtn.href = 'https://www.airbnb.fr/rooms/1478200670415261868';
+    }
+
+    function formatDate(date) {
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var year = date.getFullYear();
+        return day + '/' + month + '/' + year;
+    }
+
+    // ===== FAQ ACCORDION =====
+    window.toggleFaq = function(btn) {
+        var item = btn.parentElement;
+        var isActive = item.classList.contains('active');
+
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(function(el) {
+            el.classList.remove('active');
+        });
+
+        // Open clicked (if wasn't active)
+        if (!isActive) {
+            item.classList.add('active');
+        }
+    };
+
+    // ===== SMOOTH SCROLL FOR NAV =====
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+            var targetId = this.getAttribute('href');
+            if (targetId && targetId !== '#') {
+                var target = document.querySelector(targetId);
+                if (target) {
+                    e.preventDefault();
+                    var offset = 80;
+                    var position = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top: position, behavior: 'smooth' });
+                }
+            }
+        });
+    });
+
+})();
+</script>
+
+</body>
+</html>

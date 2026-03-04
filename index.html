@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casbah Amor | Riad Exclusif Marrakech — Rooftop, Piscine Chauffee, 6 Chambres</title>
+    <meta name="description" content="Casbah Amor - Riad exclusif avec rooftop, piscine chauffee et climatisation a Marrakech. 6 chambres, 13 voyageurs, 300m2. Note 4.94/5 Airbnb. Superhote Mehdi.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --emerald:#1B5E3B;--emerald-light:#2D8A5E;--emerald-dark:#0F3D26;
+            --sand:#D4A574;--sand-light:#F5EDE0;--sand-pale:#FAF6F0;
+            --gold:#B8860B;--gold-light:#D4A843;
+            --cream:#FFFDF8;--dark:#1A1612;--dark-soft:#2C2620;
+            --text:#1A1612;--text-mid:#6B5D4F;--text-light:#9B8E80;
+            --pink:#E8778B;
+            --font-display:'Playfair Display',Georgia,serif;
+            --font-body:'Inter',-apple-system,sans-serif;
+            --ease:cubic-bezier(0.16,1,0.3,1);
+            --ease-out:cubic-bezier(0.33,1,0.68,1);
+        }
+        html{scroll-behavior:smooth;font-size:16px;scroll-padding-top:80px}
+        body{font-family:var(--font-body);color:var(--text);background:var(--cream);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+        img{max-width:100%;height:auto;display:block}
+        a{text-decoration:none;color:inherit}
+        button{cursor:pointer;border:none;background:none;font-family:inherit}
+        ul,ol{list-style:none}
+
+        /* ===== LOADER ===== */
+        .loader{position:fixed;inset:0;z-index:10000;background:var(--dark);display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 1s ease,visibility 1s ease}
+        .loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+        .loader-logo{font-family:var(--font-display);font-size:2.5rem;color:var(--gold);letter-spacing:0.15em;opacity:0;animation:loaderFade 1.5s ease forwards}
+        .loader-line{width:60px;height:1px;background:var(--gold);margin-top:1.5rem;transform:scaleX(0);animation:loaderLine 1.5s ease 0.3s forwards}
+        .loader-sub{font-size:0.7rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--sand);margin-top:1rem;opacity:0;animation:loaderFade 1s ease 0.6s forwards}
+        @keyframes loaderFade{to{opacity:1}}
+        @keyframes loaderLine{to{transform:scaleX(1)}}
+
+        /* ===== NAV ===== */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:all 0.5s var(--ease)}
+        .nav.scrolled{background:rgba(26,22,18,0.92);backdrop-filter:blur(20px);padding:0.8rem 2rem;box-shadow:0 4px 30px rgba(0,0,0,0.15)}
+        .nav-brand{font-family:var(--font-display);font-size:1.4rem;color:#fff;letter-spacing:0.1em;font-weight:500}
+        .nav-brand span{color:var(--gold)}
+        .nav-links{display:flex;gap:2.5rem;align-items:center}
+        .nav-links a{color:rgba(255,255,255,0.8);font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:500;transition:color 0.3s;position:relative}
+        .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--gold);transition:width 0.4s var(--ease)}
+        .nav-links a:hover{color:#fff}
+        .nav-links a:hover::after{width:100%}
+        .nav-cta{background:var(--gold)!important;color:var(--dark)!important;padding:0.6rem 1.5rem;font-size:0.7rem!important;letter-spacing:0.15em!important;text-transform:uppercase;font-weight:600;transition:all 0.3s!important}
+        .nav-cta:hover{background:var(--gold-light)!important;transform:translateY(-1px)}
+        .nav-cta::after{display:none!important}
+        .nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:1001}
+        .nav-toggle span{width:24px;height:1.5px;background:#fff;transition:all 0.3s}
+
+        /* ===== HERO ===== */
+        .hero{position:relative;height:100vh;min-height:700px;overflow:hidden}
+        .hero-bg{position:absolute;inset:0}
+        .hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.05);animation:heroZoom 20s ease infinite alternate}
+        @keyframes heroZoom{0%{transform:scale(1.05) translate(0,0)}100%{transform:scale(1.12) translate(-1%,-1%)}}
+        .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,22,18,0.3) 0%,rgba(26,22,18,0.1) 40%,rgba(26,22,18,0.6) 100%)}
+        .hero-content{position:absolute;bottom:0;left:0;right:0;padding:4rem 3rem 5rem;z-index:2}
+        .hero-tag{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;opacity:0;transform:translateY(30px);animation:heroUp 1s var(--ease) 1.8s forwards}
+        .hero-tag::before{content:'';width:30px;height:1px;background:var(--gold)}
+        .hero-title{font-family:var(--font-display);font-size:clamp(3rem,7vw,5.5rem);color:#fff;font-weight:400;line-height:1.05;margin-bottom:1.5rem;opacity:0;transform:translateY(40px);animation:heroUp 1.2s var(--ease) 2s forwards}
+        .hero-title em{font-style:italic;color:var(--gold)}
+        .hero-desc{font-size:1rem;color:rgba(255,255,255,0.85);max-width:550px;line-height:1.7;font-weight:300;opacity:0;transform:translateY(30px);animation:heroUp 1s var(--ease) 2.3s forwards}
+        @keyframes heroUp{to{opacity:1;transform:translateY(0)}}
+        .hero-stats{display:flex;gap:3rem;margin-top:2.5rem;opacity:0;transform:translateY(30px);animation:heroUp 1s var(--ease) 2.5s forwards}
+        .hero-stat{text-align:center}
+        .hero-stat-val{font-family:var(--font-display);font-size:1.8rem;color:#fff;font-weight:600}
+        .hero-stat-val span{color:var(--gold);font-size:0.9rem;font-weight:400}
+        .hero-stat-label{font-size:0.65rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.15em;margin-top:0.3rem}
+        .hero-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;color:rgba(255,255,255,0.5);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;animation:heroUp 1s var(--ease) 3s forwards;opacity:0}
+        .hero-scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease infinite}
+        @keyframes scrollPulse{0%,100%{opacity:0.3;transform:scaleY(0.6)}50%{opacity:1;transform:scaleY(1)}}
+
+        /* ===== REVEAL ANIMATIONS ===== */
+        .reveal{opacity:0;transform:translateY(60px);transition:all 1s var(--ease)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-left{opacity:0;transform:translateX(-60px);transition:all 1s var(--ease)}
+        .reveal-left.visible{opacity:1;transform:translateX(0)}
+        .reveal-right{opacity:0;transform:translateX(60px);transition:all 1s var(--ease)}
+        .reveal-right.visible{opacity:1;transform:translateX(0)}
+        .reveal-scale{opacity:0;transform:scale(0.9);transition:all 1s var(--ease)}
+        .reveal-scale.visible{opacity:1;transform:scale(1)}
+        [data-delay="1"]{transition-delay:0.15s}
+        [data-delay="2"]{transition-delay:0.3s}
+        [data-delay="3"]{transition-delay:0.45s}
+        [data-delay="4"]{transition-delay:0.6s}
+
+        /* ===== SECTION COMMONS ===== */
+        .section{padding:8rem 3rem}
+        .section-dark{background:var(--dark);color:#fff}
+        .section-sand{background:var(--sand-light)}
+        .section-label{font-size:0.65rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:flex;align-items:center;gap:0.8rem}
+        .section-label::before{content:'';width:25px;height:1px;background:var(--gold)}
+        .section-title{font-family:var(--font-display);font-size:clamp(2.2rem,4vw,3.5rem);font-weight:400;line-height:1.15;margin-bottom:1.5rem}
+        .section-title em{font-style:italic;color:var(--gold)}
+        .section-desc{font-size:0.95rem;line-height:1.8;color:var(--text-mid);max-width:600px;font-weight:300}
+        .section-dark .section-desc{color:rgba(255,255,255,0.6)}
+
+        /* ===== INTRO / LE RIAD ===== */
+        .intro{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1400px;margin:0 auto;align-items:center}
+        .intro-images{display:grid;grid-template-columns:1fr 1fr;gap:1rem;position:relative}
+        .intro-images img{width:100%;height:300px;object-fit:cover;transition:transform 0.6s var(--ease)}
+        .intro-images img:first-child{grid-column:1/-1;height:350px}
+        .intro-images img:hover{transform:scale(1.03)}
+        .intro-text{padding:2rem 0}
+        .intro-features{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem}
+        .intro-feature{display:flex;align-items:flex-start;gap:0.8rem}
+        .intro-feature-icon{width:36px;height:36px;border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold);font-size:0.9rem}
+        .intro-feature h4{font-size:0.8rem;font-weight:600;margin-bottom:0.2rem}
+        .intro-feature p{font-size:0.75rem;color:var(--text-mid);line-height:1.5}
+
+        /* ===== BENTO GALLERY ===== */
+        .gallery-section{padding:0 1.5rem 8rem}
+        .gallery-header{max-width:1400px;margin:0 auto 3rem;display:flex;justify-content:space-between;align-items:end;padding:0 1.5rem}
+        .gallery-count{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-mid)}
+        .bento{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:200px;gap:0.5rem;max-width:1600px;margin:0 auto}
+        .bento-item{overflow:hidden;position:relative;cursor:pointer}
+        .bento-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s var(--ease)}
+        .bento-item:hover img{transform:scale(1.08)}
+        .bento-item::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(26,22,18,0.3),transparent);opacity:0;transition:opacity 0.4s}
+        .bento-item:hover::after{opacity:1}
+        .b1{grid-column:span 5;grid-row:span 3}
+        .b2{grid-column:span 4;grid-row:span 2}
+        .b3{grid-column:span 3;grid-row:span 2}
+        .b4{grid-column:span 3;grid-row:span 2}
+        .b5{grid-column:span 4;grid-row:span 2}
+        .b6{grid-column:span 5;grid-row:span 2}
+        .b7{grid-column:span 4;grid-row:span 3}
+        .b8{grid-column:span 4;grid-row:span 2}
+        .b9{grid-column:span 4;grid-row:span 2}
+
+        /* ===== LIGHTBOX ===== */
+        .lightbox{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:all 0.4s}
+        .lightbox.active{opacity:1;visibility:visible}
+        .lightbox img{max-width:90vw;max-height:85vh;object-fit:contain;transition:transform 0.5s var(--ease)}
+        .lightbox-close{position:absolute;top:2rem;right:2rem;color:#fff;font-size:1.5rem;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.2);transition:all 0.3s}
+        .lightbox-close:hover{border-color:var(--gold);color:var(--gold)}
+        .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);color:#fff;font-size:2rem;cursor:pointer;padding:1rem;transition:color 0.3s}
+        .lightbox-nav:hover{color:var(--gold)}
+        .lightbox-prev{left:1rem}
+        .lightbox-next{right:1rem}
+        .lightbox-counter{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.5);font-size:0.75rem;letter-spacing:0.1em}
+
+        /* ===== SPACES (Rooftop, Pool, Patio...) ===== */
+        .spaces{max-width:1400px;margin:0 auto}
+        .space-block{display:grid;grid-template-columns:1.2fr 1fr;gap:0;margin-bottom:0;min-height:600px}
+        .space-block:nth-child(even){direction:rtl}
+        .space-block:nth-child(even)>*{direction:ltr}
+        .space-img{position:relative;overflow:hidden}
+        .space-img img{width:100%;height:100%;object-fit:cover;transition:transform 8s ease}
+        .space-block:hover .space-img img{transform:scale(1.05)}
+        .space-content{display:flex;flex-direction:column;justify-content:center;padding:4rem 5rem}
+        .space-number{font-family:var(--font-display);font-size:5rem;color:var(--sand-light);font-weight:700;line-height:1;margin-bottom:1rem;opacity:0.4}
+        .section-dark .space-number{color:rgba(255,255,255,0.08)}
+        .space-content h3{font-family:var(--font-display);font-size:2rem;font-weight:400;margin-bottom:1rem}
+        .space-content h3 em{font-style:italic;color:var(--gold)}
+        .space-content p{font-size:0.9rem;line-height:1.8;color:var(--text-mid);margin-bottom:1.5rem}
+        .space-features{display:flex;flex-wrap:wrap;gap:0.6rem}
+        .space-tag{font-size:0.7rem;padding:0.4rem 1rem;border:1px solid rgba(27,94,59,0.2);color:var(--emerald);letter-spacing:0.05em}
+
+        /* ===== ROOMS ===== */
+        .rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1400px;margin:2rem auto 0}
+        .room-card{position:relative;overflow:hidden;cursor:pointer;aspect-ratio:3/4}
+        .room-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s var(--ease)}
+        .room-card:hover img{transform:scale(1.06)}
+        .room-card-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(26,22,18,0.8) 0%,rgba(26,22,18,0) 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem;transition:background 0.4s}
+        .room-card:hover .room-card-overlay{background:linear-gradient(0deg,rgba(26,22,18,0.9) 0%,rgba(26,22,18,0.1) 60%)}
+        .room-card h4{font-family:var(--font-display);font-size:1.3rem;color:#fff;font-weight:400;margin-bottom:0.3rem}
+        .room-card p{font-size:0.75rem;color:rgba(255,255,255,0.6);letter-spacing:0.05em}
+        .room-card-detail{display:flex;gap:1rem;margin-top:0.8rem;opacity:0;transform:translateY(10px);transition:all 0.4s var(--ease)}
+        .room-card:hover .room-card-detail{opacity:1;transform:translateY(0)}
+        .room-card-detail span{font-size:0.7rem;color:var(--gold);display:flex;align-items:center;gap:0.3rem}
+
+        /* ===== SERVICES ===== */
+        .services-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;max-width:1400px;margin:3rem auto 0}
+        .service-card{padding:2.5rem 2rem;border:1px solid rgba(212,165,116,0.2);background:var(--cream);transition:all 0.5s var(--ease);position:relative;overflow:hidden}
+        .service-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.5s var(--ease);transform-origin:left}
+        .service-card:hover::before{transform:scaleX(1)}
+        .service-card:hover{transform:translateY(-5px);box-shadow:0 20px 60px rgba(0,0,0,0.06)}
+        .service-icon{font-size:1.8rem;margin-bottom:1.5rem}
+        .service-card h4{font-family:var(--font-display);font-size:1.2rem;font-weight:500;margin-bottom:0.8rem}
+        .service-card p{font-size:0.8rem;line-height:1.7;color:var(--text-mid)}
+        .service-price{display:inline-block;margin-top:1rem;font-size:0.75rem;font-weight:600;color:var(--emerald);padding:0.3rem 0.8rem;background:rgba(27,94,59,0.08)}
+
+        /* ===== EXCURSIONS ===== */
+        .excursions-track{display:flex;gap:1.5rem;overflow-x:auto;padding:3rem 3rem 2rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+        .excursions-track::-webkit-scrollbar{display:none}
+        .excursion-card{flex:0 0 340px;scroll-snap-align:start;position:relative;overflow:hidden;aspect-ratio:3/4}
+        .excursion-card img{width:100%;height:100%;object-fit:cover;transition:transform 0.8s var(--ease)}
+        .excursion-card:hover img{transform:scale(1.08)}
+        .excursion-info{position:absolute;inset:0;background:linear-gradient(0deg,rgba(26,22,18,0.85) 0%,rgba(26,22,18,0) 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem}
+        .excursion-info h4{font-family:var(--font-display);font-size:1.4rem;color:#fff;margin-bottom:0.3rem}
+        .excursion-info p{font-size:0.8rem;color:rgba(255,255,255,0.65);line-height:1.6}
+        .excursion-tag{position:absolute;top:1.5rem;left:1.5rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:#fff;background:var(--emerald);padding:0.4rem 0.8rem;font-weight:500}
+
+        /* ===== REVIEWS ===== */
+        .reviews-track{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:1400px;margin:3rem auto 0}
+        .review-card{padding:2.5rem;background:var(--cream);border:1px solid rgba(212,165,116,0.15);position:relative}
+        .review-card::before{content:'\201C';font-family:var(--font-display);font-size:4rem;color:var(--gold);opacity:0.2;position:absolute;top:0.5rem;left:1.5rem;line-height:1}
+        .review-stars{display:flex;gap:0.2rem;color:var(--gold);font-size:0.8rem;margin-bottom:1rem}
+        .review-text{font-size:0.88rem;line-height:1.8;color:var(--text-mid);font-style:italic;margin-bottom:1.5rem}
+        .review-author{display:flex;align-items:center;gap:1rem}
+        .review-avatar{width:40px;height:40px;border-radius:50%;background:var(--sand-light);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1rem;color:var(--emerald);font-weight:600}
+        .review-name{font-weight:600;font-size:0.85rem}
+        .review-meta{font-size:0.72rem;color:var(--text-light)}
+        .review-score{display:flex;align-items:center;justify-content:center;gap:3rem;margin-top:4rem;padding:3rem;border:1px solid rgba(212,165,116,0.2);max-width:800px;margin-left:auto;margin-right:auto}
+        .review-score-big{text-align:center}
+        .review-score-big .val{font-family:var(--font-display);font-size:4rem;color:var(--emerald);font-weight:700;line-height:1}
+        .review-score-big .label{font-size:0.7rem;color:var(--text-mid);letter-spacing:0.1em;text-transform:uppercase;margin-top:0.3rem}
+        .review-bars{flex:1;display:flex;flex-direction:column;gap:0.5rem}
+        .review-bar-item{display:flex;align-items:center;gap:0.8rem;font-size:0.75rem}
+        .review-bar-item label{width:100px;color:var(--text-mid)}
+        .review-bar{flex:1;height:4px;background:var(--sand-light);position:relative;overflow:hidden}
+        .review-bar-fill{height:100%;background:var(--emerald);transition:width 1.5s var(--ease)}
+        .review-bar-item .score{font-weight:600;font-size:0.8rem;color:var(--emerald);width:30px;text-align:right}
+
+        /* ===== BOOKING / RESERVATION ===== */
+        .booking{max-width:1200px;margin:0 auto}
+        .booking-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+        .booking-form{background:#fff;padding:3rem;border:1px solid rgba(212,165,116,0.2);box-shadow:0 20px 60px rgba(0,0,0,0.04)}
+        .booking-form h3{font-family:var(--font-display);font-size:1.8rem;margin-bottom:0.5rem}
+        .booking-form .subtitle{font-size:0.85rem;color:var(--text-mid);margin-bottom:2rem}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+        .form-group{display:flex;flex-direction:column;gap:0.4rem}
+        .form-group label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-mid);font-weight:500}
+        .form-group input,.form-group select{padding:0.9rem 1rem;border:1px solid rgba(212,165,116,0.3);background:var(--sand-pale);font-family:var(--font-body);font-size:0.9rem;color:var(--text);transition:border-color 0.3s;outline:none}
+        .form-group input:focus,.form-group select:focus{border-color:var(--emerald)}
+        .booking-summary{margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(212,165,116,0.2)}
+        .summary-row{display:flex;justify-content:space-between;margin-bottom:0.8rem;font-size:0.88rem}
+        .summary-row.total{font-weight:700;font-size:1.1rem;padding-top:1rem;border-top:1px solid var(--dark);margin-top:1rem}
+        .summary-row .label{color:var(--text-mid)}
+        .btn-book{width:100%;padding:1.1rem;background:var(--emerald);color:#fff;font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:600;margin-top:1.5rem;transition:all 0.3s;position:relative;overflow:hidden}
+        .btn-book::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transform:translateX(-100%);transition:transform 0.6s}
+        .btn-book:hover{background:var(--emerald-dark)}
+        .btn-book:hover::after{transform:translateX(100%)}
+        .booking-info h4{font-family:var(--font-display);font-size:1.6rem;margin-bottom:1.5rem}
+        .booking-info-block{margin-bottom:2rem}
+        .booking-info-block h5{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem}
+        .season-grid{display:flex;flex-direction:column;gap:0.5rem}
+        .season-row{display:flex;justify-content:space-between;align-items:center;padding:0.8rem 1rem;background:var(--sand-pale)}
+        .season-row .name{font-size:0.85rem;font-weight:500}
+        .season-row .months{font-size:0.75rem;color:var(--text-mid)}
+        .season-row .price{font-weight:700;color:var(--emerald)}
+        .platform-links{display:flex;flex-direction:column;gap:0.8rem;margin-top:2rem}
+        .platform-link{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;border:1px solid rgba(212,165,116,0.2);transition:all 0.3s;text-decoration:none}
+        .platform-link:hover{border-color:var(--gold);transform:translateX(5px)}
+        .platform-link .pf-name{font-weight:600;font-size:0.9rem}
+        .platform-link .pf-desc{font-size:0.75rem;color:var(--text-mid)}
+        .platform-link .pf-arrow{margin-left:auto;color:var(--gold);font-size:1.2rem}
+
+        /* ===== INSTAGRAM ===== */
+        .insta-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:0.3rem}
+        .insta-item{aspect-ratio:1;overflow:hidden;position:relative;cursor:pointer}
+        .insta-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s var(--ease)}
+        .insta-item:hover img{transform:scale(1.1)}
+        .insta-item::after{content:'@casbah_amor';position:absolute;inset:0;background:rgba(27,94,59,0.7);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.75rem;letter-spacing:0.1em;opacity:0;transition:opacity 0.3s}
+        .insta-item:hover::after{opacity:1}
+        .insta-banner{text-align:center;padding:3rem;background:var(--dark)}
+        .insta-banner a{color:#fff;font-family:var(--font-display);font-size:1.5rem;display:inline-flex;align-items:center;gap:0.8rem;transition:color 0.3s}
+        .insta-banner a:hover{color:var(--gold)}
+
+        /* ===== MAP ===== */
+        .map-container{position:relative;height:500px;overflow:hidden}
+        .map-container iframe{width:100%;height:100%;border:0;filter:saturate(0.6) contrast(1.1)}
+        .map-overlay{position:absolute;top:3rem;left:3rem;background:#fff;padding:2.5rem;max-width:380px;box-shadow:0 20px 60px rgba(0,0,0,0.1)}
+        .map-overlay h3{font-family:var(--font-display);font-size:1.5rem;margin-bottom:1rem}
+        .map-overlay p{font-size:0.85rem;line-height:1.7;color:var(--text-mid);margin-bottom:0.5rem}
+        .map-overlay .distance{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--emerald);margin-top:0.3rem}
+
+        /* ===== FOOTER ===== */
+        .footer{background:var(--dark);color:rgba(255,255,255,0.5);padding:5rem 3rem 2rem}
+        .footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1400px;margin:0 auto 4rem}
+        .footer-brand{font-family:var(--font-display);font-size:1.8rem;color:#fff;margin-bottom:1rem}
+        .footer-brand span{color:var(--gold)}
+        .footer-tagline{font-size:0.85rem;line-height:1.7;max-width:300px}
+        .footer h5{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem}
+        .footer ul li{margin-bottom:0.8rem}
+        .footer ul li a{font-size:0.85rem;color:rgba(255,255,255,0.5);transition:color 0.3s}
+        .footer ul li a:hover{color:var(--gold)}
+        .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;text-align:center;font-size:0.75rem;max-width:1400px;margin:0 auto}
+
+        /* ===== FLOATING BOOKING BAR ===== */
+        .float-bar{position:fixed;bottom:0;left:0;right:0;z-index:999;background:var(--dark);padding:0.8rem 2rem;display:flex;align-items:center;justify-content:space-between;transform:translateY(100%);transition:transform 0.5s var(--ease);border-top:1px solid rgba(184,134,11,0.2)}
+        .float-bar.visible{transform:translateY(0)}
+        .float-bar-info{display:flex;align-items:center;gap:2rem}
+        .float-bar-price{color:#fff;font-family:var(--font-display);font-size:1.4rem}
+        .float-bar-price span{font-size:0.8rem;color:rgba(255,255,255,0.5);font-family:var(--font-body)}
+        .float-bar-rating{color:var(--gold);font-size:0.85rem;display:flex;align-items:center;gap:0.3rem}
+        .float-bar-btns{display:flex;gap:0.8rem}
+        .float-bar-btn{padding:0.7rem 1.8rem;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;transition:all 0.3s}
+        .fb-airbnb{background:#FF5A5F;color:#fff}
+        .fb-airbnb:hover{background:#e54e52}
+        .fb-booking{background:#003580;color:#fff}
+        .fb-booking:hover{background:#002a66}
+        .fb-direct{background:var(--gold);color:var(--dark)}
+        .fb-direct:hover{background:var(--gold-light)}
+
+        /* ===== MOBILE RESPONSIVE ===== */
+        @media(max-width:1024px){
+            .section{padding:5rem 2rem}
+            .intro{grid-template-columns:1fr;gap:2rem}
+            .space-block{grid-template-columns:1fr;min-height:auto}
+            .space-block:nth-child(even){direction:ltr}
+            .space-img{height:400px}
+            .space-content{padding:3rem 2rem}
+            .rooms-grid{grid-template-columns:repeat(2,1fr)}
+            .services-grid{grid-template-columns:repeat(2,1fr)}
+            .reviews-track{grid-template-columns:1fr}
+            .booking-grid{grid-template-columns:1fr}
+            .footer-top{grid-template-columns:1fr 1fr}
+            .bento{grid-template-columns:repeat(6,1fr);grid-auto-rows:180px}
+            .b1{grid-column:span 6;grid-row:span 2}
+            .b2{grid-column:span 3;grid-row:span 2}
+            .b3{grid-column:span 3;grid-row:span 2}
+            .b4{grid-column:span 3;grid-row:span 1}
+            .b5{grid-column:span 3;grid-row:span 1}
+            .b6{grid-column:span 6;grid-row:span 2}
+            .b7{grid-column:span 3;grid-row:span 2}
+            .b8{grid-column:span 3;grid-row:span 2}
+            .b9{grid-column:span 6;grid-row:span 1}
+        }
+        @media(max-width:768px){
+            .section{padding:4rem 1.5rem}
+            .nav-links{display:none}
+            .nav-links.open{display:flex;flex-direction:column;position:fixed;inset:0;background:var(--dark);align-items:center;justify-content:center;gap:2rem;z-index:999}
+            .nav-toggle{display:flex}
+            .hero-content{padding:2rem 1.5rem 4rem}
+            .hero-title{font-size:2.5rem}
+            .hero-stats{gap:1.5rem;flex-wrap:wrap}
+            .intro-features{grid-template-columns:1fr}
+            .intro-images{grid-template-columns:1fr}
+            .intro-images img:first-child{height:250px}
+            .intro-images img{height:200px}
+            .rooms-grid{grid-template-columns:1fr}
+            .services-grid{grid-template-columns:1fr}
+            .insta-grid{grid-template-columns:repeat(3,1fr)}
+            .form-row{grid-template-columns:1fr}
+            .review-score{flex-direction:column;gap:2rem}
+            .float-bar{flex-direction:column;gap:0.8rem;padding:1rem}
+            .float-bar-btns{width:100%;justify-content:center}
+            .map-overlay{position:relative;top:auto;left:auto;max-width:100%;margin:-50px 1.5rem 0;z-index:2}
+            .map-container{height:350px}
+            .space-number{font-size:3rem}
+            .gallery-header{flex-direction:column;gap:1rem;align-items:flex-start}
+            .bento{grid-template-columns:1fr 1fr;grid-auto-rows:200px}
+            .b1,.b6{grid-column:span 2}
+            .b2,.b3,.b4,.b5,.b7,.b8,.b9{grid-column:span 1;grid-row:span 1}
+            .footer-top{grid-template-columns:1fr}
+            .excursion-card{flex:0 0 280px}
+        }
+        @media(max-width:480px){
+            .hero{min-height:600px}
+            .hero-title{font-size:2rem}
+            .section-title{font-size:1.8rem}
+            .hero-stats{gap:1rem}
+            .hero-stat-val{font-size:1.3rem}
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+    <div class="loader-logo">CASBAH AMOR</div>
+    <div class="loader-line"></div>
+    <div class="loader-sub">Marrakech</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+    <a href="#" class="nav-brand">Casbah <span>Amor</span></a>
+    <div class="nav-links" id="navLinks">
+        <a href="#riad">Le Riad</a>
+        <a href="#gallery">Galerie</a>
+        <a href="#spaces">Espaces</a>
+        <a href="#rooms">Chambres</a>
+        <a href="#services">Services</a>
+        <a href="#excursions">Excursions</a>
+        <a href="#reviews">Avis</a>
+        <a href="#booking" class="nav-cta">Reserver</a>
+    </div>
+    <div class="nav-toggle" id="navToggle">
+        <span></span><span></span><span></span>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg">
+        <img src="images/airbnb-new/airbnb-05.jpeg" alt="Patio Casbah Amor Marrakech" loading="eager">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <div class="hero-tag">Riad exclusif a Marrakech</div>
+        <h1 class="hero-title">Casbah <em>Amor</em></h1>
+        <p class="hero-desc">Rooftop avec piscine chauffee et climatisation. Un riad exclusif, calme et elegant concu pour les voyageurs a la recherche de confort, de design et de charme marocain authentique.</p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-val">4.94<span>/5</span></div>
+                <div class="hero-stat-label">Airbnb</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-val">13</div>
+                <div class="hero-stat-label">Voyageurs</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-val">6</div>
+                <div class="hero-stat-label">Chambres</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-val">300<span>m2</span></div>
+                <div class="hero-stat-label">Surface</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+        Decouvrir
+    </div>
+</section>
+
+<!-- LE RIAD -->
+<section class="section" id="riad">
+    <div class="intro">
+        <div class="intro-text">
+            <div class="section-label reveal">Le Riad</div>
+            <h2 class="section-title reveal" data-delay="1">Le summum de la vie <em>sophistiquee</em></h2>
+            <p class="section-desc reveal" data-delay="2">Idealement situe a quelques minutes de Jemaa el-Fna, Gueliz, Hivernage et La Mamounia, Casbah Amor est un riad exclusif entierement privatise pour un groupe de 13 personnes. Selectionne par un decorateur d'interieur professionnel pour meler le charme marocain traditionnel et le luxe moderne.</p>
+            <div class="intro-features reveal" data-delay="3">
+                <div class="intro-feature">
+                    <div class="intro-feature-icon">&#9733;</div>
+                    <div>
+                        <h4>Superhote Mehdi</h4>
+                        <p>Repond dans l'heure, 100% de taux de reponse</p>
+                    </div>
+                </div>
+                <div class="intro-feature">
+                    <div class="intro-feature-icon">&#9832;</div>
+                    <div>
+                        <h4>Piscine Chauffee</h4>
+                        <p>Sur le rooftop, rare dans la medina</p>
+                    </div>
+                </div>
+                <div class="intro-feature">
+                    <div class="intro-feature-icon">&#10052;</div>
+                    <div>
+                        <h4>Climatisation</h4>
+                        <p>Chauffage et clim dans toutes les chambres</p>
+                    </div>
+                </div>
+                <div class="intro-feature">
+                    <div class="intro-feature-icon">&#8962;</div>
+                    <div>
+                        <h4>Arrivee Autonome</h4>
+                        <p>Serrure connectee, acces 24h/24</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="intro-images">
+            <img src="images/airbnb-new/airbnb-03.jpeg" alt="Galerie riad" class="reveal-scale" loading="lazy">
+            <img src="images/airbnb-new/airbnb-20.jpeg" alt="Patio riad" class="reveal-scale" data-delay="1" loading="lazy">
+            <img src="images/airbnb-new/airbnb-45.jpeg" alt="Detail riad" class="reveal-scale" data-delay="2" loading="lazy">
+        </div>
+    </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+        <div>
+            <div class="section-label reveal">Galerie</div>
+            <h2 class="section-title reveal" data-delay="1">Chaque coin invite a la <em>detente</em></h2>
+        </div>
+        <div class="gallery-count reveal">69 photos</div>
+    </div>
+    <div class="bento">
+        <div class="bento-item b1 reveal-scale" onclick="openLightbox(0)"><img src="images/airbnb-new/airbnb-04.jpeg" alt="Piscine rooftop" loading="lazy"></div>
+        <div class="bento-item b2 reveal-scale" data-delay="1" onclick="openLightbox(1)"><img src="images/airbnb-new/airbnb-02.jpeg" alt="Solarium" loading="lazy"></div>
+        <div class="bento-item b3 reveal-scale" data-delay="2" onclick="openLightbox(2)"><img src="images/airbnb-new/airbnb-09.jpeg" alt="Lounge rooftop" loading="lazy"></div>
+        <div class="bento-item b4 reveal-scale" data-delay="1" onclick="openLightbox(3)"><img src="images/airbnb-new/airbnb-30.jpeg" alt="Chambre noir et or" loading="lazy"></div>
+        <div class="bento-item b5 reveal-scale" data-delay="2" onclick="openLightbox(4)"><img src="images/airbnb-new/airbnb-01.jpeg" alt="Terrasse bar" loading="lazy"></div>
+        <div class="bento-item b6 reveal-scale" onclick="openLightbox(5)"><img src="images/airbnb-new/airbnb-12.jpeg" alt="Bar zellige" loading="lazy"></div>
+        <div class="bento-item b7 reveal-scale" data-delay="1" onclick="openLightbox(6)"><img src="images/airbnb-new/airbnb-42.jpeg" alt="Chambre design" loading="lazy"></div>
+        <div class="bento-item b8 reveal-scale" data-delay="2" onclick="openLightbox(7)"><img src="images/airbnb-new/airbnb-50.jpeg" alt="Chambre cosy" loading="lazy"></div>
+        <div class="bento-item b9 reveal-scale" data-delay="3" onclick="openLightbox(8)"><img src="images/airbnb-new/airbnb-08.jpeg" alt="Solarium transats" loading="lazy"></div>
+    </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+    <div class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">&#8249;</div>
+    <img id="lightboxImg" src="" alt="Photo Casbah Amor">
+    <div class="lightbox-nav lightbox-next" onclick="navLightbox(1)">&#8250;</div>
+    <div class="lightbox-counter" id="lightboxCounter"></div>
+</div>
+
+<!-- SPACES -->
+<section class="section section-sand" id="spaces">
+    <div class="spaces">
+        <div style="text-align:center;margin-bottom:4rem">
+            <div class="section-label reveal" style="justify-content:center">Les Espaces</div>
+            <h2 class="section-title reveal" data-delay="1" style="text-align:center">Un riad, mille <em>experiences</em></h2>
+        </div>
+
+        <div class="space-block reveal">
+            <div class="space-img"><img src="images/airbnb-new/airbnb-04.jpeg" alt="Rooftop piscine" loading="lazy"></div>
+            <div class="space-content">
+                <div class="space-number">01</div>
+                <h3>Rooftop & <em>Piscine</em></h3>
+                <p>Terrasse sur le toit avec solarium et lits de salon. Piscine chauffee sur le toit, rare dans la medina, parfaite pour se rafraichir apres une journee dans les souks.</p>
+                <div class="space-features">
+                    <span class="space-tag">Piscine chauffee</span>
+                    <span class="space-tag">Transats</span>
+                    <span class="space-tag">Bar en zellige</span>
+                    <span class="space-tag">Vue panoramique</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-block reveal">
+            <div class="space-img"><img src="images/airbnb-new/airbnb-05.jpeg" alt="Patio salon" loading="lazy"></div>
+            <div class="space-content">
+                <div class="space-number">02</div>
+                <h3>Patio & <em>Salon</em></h3>
+                <p>Salons ouverts et elegants avec des touches artisanales locales. Double hauteur sous plafond avec balustrades en fer forge, lanternes marocaines et canapes en velours vert.</p>
+                <div class="space-features">
+                    <span class="space-tag">Double hauteur</span>
+                    <span class="space-tag">Canapes velours</span>
+                    <span class="space-tag">TV ecran plat</span>
+                    <span class="space-tag">Coin repas</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-block reveal">
+            <div class="space-img"><img src="images/airbnb-new/airbnb-09.jpeg" alt="Terrasse lounge" loading="lazy"></div>
+            <div class="space-content">
+                <div class="space-number">03</div>
+                <h3>Terrasse <em>Lounge</em></h3>
+                <p>Coin salon exterieur ombrage confortable sous un toit en roseau traditionnel. Miroirs artisanaux en raphia, lanternes en osier et banquettes profondes pour se detendre a l'abri du soleil.</p>
+                <div class="space-features">
+                    <span class="space-tag">Toit en roseau</span>
+                    <span class="space-tag">Banquettes</span>
+                    <span class="space-tag">Balancelle</span>
+                    <span class="space-tag">Coin ombre</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="space-block reveal">
+            <div class="space-img"><img src="images/airbnb-new/airbnb-15.jpeg" alt="Cuisine equipee" loading="lazy"></div>
+            <div class="space-content">
+                <div class="space-number">04</div>
+                <h3>Cuisine <em>Equipee</em></h3>
+                <p>Cuisine entierement equipee, ideale pour les sejours en groupe. Machine Nespresso, epices marocaines, refrigerateur, plan de travail en zellige vert et tout le necessaire pour cuisiner.</p>
+                <div class="space-features">
+                    <span class="space-tag">Nespresso</span>
+                    <span class="space-tag">Plan zellige</span>
+                    <span class="space-tag">Equipement complet</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CHAMBRES -->
+<section class="section" id="rooms">
+    <div style="text-align:center;margin-bottom:3rem">
+        <div class="section-label reveal" style="justify-content:center">Les Chambres</div>
+        <h2 class="section-title reveal" data-delay="1">6 chambres, chacune avec son <em>caractere</em></h2>
+        <p class="section-desc reveal" data-delay="2" style="margin:0 auto">Toutes equipees de climatisation, salle de bains privee, linge de lit haut de gamme et une decoration unique alliant confort et charme.</p>
+    </div>
+    <div class="rooms-grid">
+        <div class="room-card reveal" onclick="openLightbox(9)">
+            <img src="images/airbnb-new/airbnb-30.jpeg" alt="Suite Royale" loading="lazy">
+            <div class="room-card-overlay">
+                <h4>Suite Royale</h4>
+                <p>Lit King 160x200 — Salle de bain privee</p>
+                <div class="room-card-detail"><span>&#10052; Clim</span><span>&#9832; SdB privee</span><span>&#9733; Vue patio</span></div>
+            </div>
+        </div>
+        <div class="room-card reveal" data-delay="1" onclick="openLightbox(10)">
+            <img src="images/airbnb-new/airbnb-40.jpeg" alt="Chambre Medina" loading="lazy">
+            <div class="room-card-overlay">
+                <h4>Chambre Medina</h4>
+                <p>Lit double 140x200 — Style traditionnel</p>
+                <div class="room-card-detail"><span>&#10052; Clim</span><span>&#9832; SdB privee</span><span>&#9733; Arches</span></div>
+            </div>
+        </div>
+        <div class="room-card reveal" data-delay="2" onclick="openLightbox(11)">
+            <img src="images/airbnb-new/airbnb-42.jpeg" alt="Chambre Meknes" loading="lazy">
+            <div class="room-card-overlay">
+                <h4>Chambre Meknes</h4>
+                <p>Lit double 140x200 — Motifs geometriques</p>
+                <div class="room-card-detail"><span>&#10052; Clim</span><span>&#9832; SdB privee</span><span>&#9733; Design</span></div>
+            </div>
+        </div>
+        <div class="room-card reveal" data-delay="1" onclick="openLightbox(12)">
+            <img src="images/airbnb-new/airbnb-50.jpeg" alt="Chambre Atlas" loading="lazy">
+            <div class="room-card-overlay">
+                <h4>Chambre Atlas</h4>
+                <p>Lit double 140x200 — Ambiance chaleureuse</p>
+                <div class="room-card-detail"><span>&#10052; Clim</span><span>&#9832; SdB privee</span><span>&#9733; Cosy</span></div>
+            </div>
+        </div>
+        <div class="room-card reveal" data-delay="2" onclick="openLightbox(13)">
+            <img src="images/airbnb-new/airbnb-25.jpeg" alt="Chambre Jardin" loading="lazy">
+            <div class="room-card-overlay">
+                <h4>Chambre Jardin</h4>
+                <p>Lit King 160x200 — Vue sur le patio</p>
+                <div class="room-card-detail"><span>&#10052; Clim</span><span>&#9832; SdB privee</span><span>&#9733; Lumineux</span></div>
+            </div>
+        </div>
+        <div class="room-card reveal" data-delay="3" onclick="openLightbox(14)">
+            <img src="images/airbnb-new/airbnb-55.jpeg" alt="Chambre Riad" loading="lazy">
+            <div class="room-card-overlay">
+                <h4>Chambre Riad</h4>
+                <p>Lit simple 90x200 — Tadelakt et laiton</p>
+                <div class="room-card-detail"><span>&#10052; Clim</span><span>&#9832; SdB privee</span><span>&#9733; Intime</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section section-sand" id="services">
+    <div style="text-align:center;margin-bottom:3rem">
+        <div class="section-label reveal" style="justify-content:center">Services</div>
+        <h2 class="section-title reveal" data-delay="1">Tout est prevu pour votre <em>confort</em></h2>
+    </div>
+    <div class="services-grid">
+        <div class="service-card reveal">
+            <div class="service-icon">&#128722;</div>
+            <h4>Menage Quotidien</h4>
+            <p>Service de menage quotidien entre 11h et 15h pour un riad impeccable.</p>
+            <span class="service-price">Inclus</span>
+        </div>
+        <div class="service-card reveal" data-delay="1">
+            <div class="service-icon">&#127860;</div>
+            <h4>Petit-Dejeuner</h4>
+            <p>Petit-dejeuner marocain servi chaque matin. Crepes, jus frais, confitures.</p>
+            <span class="service-price">12 EUR / pers / jour</span>
+        </div>
+        <div class="service-card reveal" data-delay="2">
+            <div class="service-icon">&#128663;</div>
+            <h4>Transfert Aeroport</h4>
+            <p>Transport prive depuis et vers l'aeroroport de Marrakech Menara.</p>
+            <span class="service-price">Sur demande</span>
+        </div>
+        <div class="service-card reveal" data-delay="3">
+            <div class="service-icon">&#127790;</div>
+            <h4>Piscine Chauffee</h4>
+            <p>Chauffage de la piscine du rooftop pour un confort optimal toute l'annee.</p>
+            <span class="service-price">38 EUR / jour</span>
+        </div>
+        <div class="service-card reveal">
+            <div class="service-icon">&#128134;</div>
+            <h4>Chef Prive</h4>
+            <p>Chef a domicile pour un diner marocain authentique ou un menu personnalise.</p>
+            <span class="service-price">Sur demande</span>
+        </div>
+        <div class="service-card reveal" data-delay="1">
+            <div class="service-icon">&#128134;</div>
+            <h4>Massages & Bien-etre</h4>
+            <p>Soins bien-etre et massages directement au riad pour une relaxation totale.</p>
+            <span class="service-price">Sur demande</span>
+        </div>
+        <div class="service-card reveal" data-delay="2">
+            <div class="service-icon">&#128246;</div>
+            <h4>WiFi Haut Debit</h4>
+            <p>Connexion WiFi rapide dans tout le riad pour rester connecte.</p>
+            <span class="service-price">Inclus</span>
+        </div>
+        <div class="service-card reveal" data-delay="3">
+            <div class="service-icon">&#128664;</div>
+            <h4>Parking Securise</h4>
+            <p>Parking a 3 minutes a pied du riad, payable sur place.</p>
+            <span class="service-price">1 EUR / jour</span>
+        </div>
+    </div>
+</section>
+
+<!-- EXCURSIONS -->
+<section class="section section-dark" id="excursions">
+    <div style="max-width:1400px;margin:0 auto">
+        <div class="section-label reveal">Excursions & Activites</div>
+        <h2 class="section-title reveal" data-delay="1" style="color:#fff">Explorez Marrakech et ses <em>alentours</em></h2>
+        <p class="section-desc reveal" data-delay="2">Toutes nos excursions sont organisees sur mesure par notre equipe. Du desert d'Agafay aux sommets de l'Atlas, vivez des experiences inoubliables.</p>
+    </div>
+    <div class="excursions-track">
+        <div class="excursion-card reveal-scale">
+            <img src="https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?w=600&q=80" alt="Desert Agafay">
+            <div class="excursion-info">
+                <h4>Desert d'Agafay</h4>
+                <p>Diner sous les etoiles, balade en chameau et nuit en bivouac de luxe.</p>
+            </div>
+            <div class="excursion-tag">A 40 min</div>
+        </div>
+        <div class="excursion-card reveal-scale" data-delay="1">
+            <img src="https://images.unsplash.com/photo-1545167622-3a6ac756afa4?w=600&q=80" alt="Atlas">
+            <div class="excursion-info">
+                <h4>Montagnes de l'Atlas</h4>
+                <p>Randonnee dans les vallees berberes, dejeuner chez l'habitant, cascades.</p>
+            </div>
+            <div class="excursion-tag">Journee</div>
+        </div>
+        <div class="excursion-card reveal-scale" data-delay="2">
+            <img src="https://images.unsplash.com/photo-1560095633-644f59e0a84f?w=600&q=80" alt="Essaouira">
+            <div class="excursion-info">
+                <h4>Essaouira</h4>
+                <p>Cite portuaire avec ses remparts, ses galeries d'art et ses fruits de mer.</p>
+            </div>
+            <div class="excursion-tag">Journee</div>
+        </div>
+        <div class="excursion-card reveal-scale" data-delay="3">
+            <img src="https://images.unsplash.com/photo-1572204292164-b35ba943fca7?w=600&q=80" alt="Quad">
+            <div class="excursion-info">
+                <h4>Quad & Buggy</h4>
+                <p>Aventure dans la palmeraie ou le desert en quad ou buggy.</p>
+            </div>
+            <div class="excursion-tag">2-3h</div>
+        </div>
+        <div class="excursion-card reveal-scale">
+            <img src="https://images.unsplash.com/photo-1548018560-c7196e91a5e0?w=600&q=80" alt="Hammam">
+            <div class="excursion-info">
+                <h4>Hammam Traditionnel</h4>
+                <p>Gommage au savon noir, massage a l'huile d'argan dans un hammam authentique.</p>
+            </div>
+            <div class="excursion-tag">2h</div>
+        </div>
+        <div class="excursion-card reveal-scale" data-delay="1">
+            <img src="https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&q=80" alt="Souks">
+            <div class="excursion-info">
+                <h4>Visite Guidee des Souks</h4>
+                <p>Decouvrez les artisans, les epices, les tanneries avec un guide local.</p>
+            </div>
+            <div class="excursion-tag">3h</div>
+        </div>
+        <div class="excursion-card reveal-scale" data-delay="2">
+            <img src="https://images.unsplash.com/photo-1517315003714-a071486bd9ea?w=600&q=80" alt="Cours cuisine">
+            <div class="excursion-info">
+                <h4>Cours de Cuisine</h4>
+                <p>Apprenez a preparer un tajine et un couscous avec un chef marocain.</p>
+            </div>
+            <div class="excursion-tag">3h</div>
+        </div>
+        <div class="excursion-card reveal-scale" data-delay="3">
+            <img src="https://images.unsplash.com/photo-1518639192441-8fce0a366e2e?w=600&q=80" alt="Montgolfiere">
+            <div class="excursion-info">
+                <h4>Vol en Montgolfiere</h4>
+                <p>Survolez Marrakech et l'Atlas au lever du soleil. Experience magique.</p>
+            </div>
+            <div class="excursion-tag">1h</div>
+        </div>
+    </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section" id="reviews">
+    <div style="text-align:center;margin-bottom:2rem">
+        <div class="section-label reveal" style="justify-content:center">Avis Voyageurs</div>
+        <h2 class="section-title reveal" data-delay="1">Ce qu'ils disent de <em>Casbah Amor</em></h2>
+    </div>
+    <div class="review-score reveal">
+        <div class="review-score-big">
+            <div class="val">4.94</div>
+            <div class="label">sur 5 — 18 avis</div>
+        </div>
+        <div class="review-bars">
+            <div class="review-bar-item"><label>Proprete</label><div class="review-bar"><div class="review-bar-fill" data-width="100"></div></div><span class="score">5.0</span></div>
+            <div class="review-bar-item"><label>Precision</label><div class="review-bar"><div class="review-bar-fill" data-width="98"></div></div><span class="score">4.9</span></div>
+            <div class="review-bar-item"><label>Arrivee</label><div class="review-bar"><div class="review-bar-fill" data-width="100"></div></div><span class="score">5.0</span></div>
+            <div class="review-bar-item"><label>Communication</label><div class="review-bar"><div class="review-bar-fill" data-width="98"></div></div><span class="score">4.9</span></div>
+            <div class="review-bar-item"><label>Emplacement</label><div class="review-bar"><div class="review-bar-fill" data-width="96"></div></div><span class="score">4.8</span></div>
+            <div class="review-bar-item"><label>Qualite-prix</label><div class="review-bar"><div class="review-bar-fill" data-width="98"></div></div><span class="score">4.9</span></div>
+        </div>
+    </div>
+    <div class="reviews-track">
+        <div class="review-card reveal">
+            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="review-text">Notre sejour a Casbah Amor a ete tres agreable ! Le riad est magnifique et a une veritable ambiance d'hotel de luxe. Parfaitement situe dans un endroit calme. Nous reviendrons assurement !</p>
+            <div class="review-author">
+                <div class="review-avatar">L</div>
+                <div><div class="review-name">Laveena</div><div class="review-meta">11 ans sur Airbnb — Fevrier 2026</div></div>
+            </div>
+        </div>
+        <div class="review-card reveal" data-delay="1">
+            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="review-text">Fabuleux Riad ! Anniversaire en compagnie de 10 copines toutes aussi ravies que moi ! Tout etait parfait, le lieu cosy, les chambres decorees avec gout ! La medina est a proximite... je recommande a 100%</p>
+            <div class="review-author">
+                <div class="review-avatar">M</div>
+                <div><div class="review-name">Maagano</div><div class="review-meta">6 ans sur Airbnb — Septembre 2025</div></div>
+            </div>
+        </div>
+        <div class="review-card reveal" data-delay="2">
+            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="review-text">Nous avons adore cet endroit et nous y retournerons a 100 %. Les lits extremement confortables et une intimite parfaite. Je n'ai jamais sejourne dans un riad plus parfait. Merci !</p>
+            <div class="review-author">
+                <div class="review-avatar">P</div>
+                <div><div class="review-name">Patrice</div><div class="review-meta">Temara, Maroc — Novembre 2025</div></div>
+            </div>
+        </div>
+        <div class="review-card reveal">
+            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="review-text">Excellent sejour, les instructions etaient claires rendant l'arrivee autonome facile et agreable. La flexibilite et la reactivite de l'hote ont rendu l'experience encore meilleure.</p>
+            <div class="review-author">
+                <div class="review-avatar">E</div>
+                <div><div class="review-name">Emma</div><div class="review-meta">8 ans sur Airbnb — Fevrier 2026</div></div>
+            </div>
+        </div>
+        <div class="review-card reveal" data-delay="1">
+            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="review-text">Nous etions un groupe de 11 a avoir sejourne dans l'etablissement. Celui-ci etait impeccable, spacieux et son emplacement est ideal !</p>
+            <div class="review-author">
+                <div class="review-avatar">M</div>
+                <div><div class="review-name">Maxime</div><div class="review-meta">Curtilles, Suisse — Janvier 2026</div></div>
+            </div>
+        </div>
+        <div class="review-card reveal" data-delay="2">
+            <div class="review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+            <p class="review-text">Nous avons passe un agreable sejour, les echanges ont ete tres fluides, merci beaucoup !</p>
+            <div class="review-author">
+                <div class="review-avatar">N</div>
+                <div><div class="review-name">Nour</div><div class="review-meta">9 ans sur Airbnb — Decembre 2025</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BOOKING -->
+<section class="section section-sand" id="booking">
+    <div class="booking">
+        <div style="text-align:center;margin-bottom:3rem">
+            <div class="section-label reveal" style="justify-content:center">Reservation</div>
+            <h2 class="section-title reveal" data-delay="1">Reservez votre sejour a <em>Casbah Amor</em></h2>
+        </div>
+        <div class="booking-grid">
+            <div class="booking-form reveal">
+                <h3>Simulez votre sejour</h3>
+                <p class="subtitle">Calculez le prix en fonction de vos dates et options</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Arrivee</label>
+                        <input type="date" id="checkin" min="2026-03-05">
+                    </div>
+                    <div class="form-group">
+                        <label>Depart</label>
+                        <input type="date" id="checkout">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Voyageurs</label>
+                        <select id="guests">
+                            <option value="1">1 voyageur</option>
+                            <option value="2" selected>2 voyageurs</option>
+                            <option value="3">3 voyageurs</option>
+                            <option value="4">4 voyageurs</option>
+                            <option value="5">5 voyageurs</option>
+                            <option value="6">6 voyageurs</option>
+                            <option value="7">7 voyageurs</option>
+                            <option value="8">8 voyageurs</option>
+                            <option value="9">9 voyageurs</option>
+                            <option value="10">10 voyageurs</option>
+                            <option value="11">11 voyageurs</option>
+                            <option value="12">12 voyageurs</option>
+                            <option value="13">13 voyageurs</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Piscine chauffee</label>
+                        <select id="pool"><option value="0">Non</option><option value="1">Oui (+38 EUR/jour)</option></select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Petit-dejeuner</label>
+                        <select id="breakfast"><option value="0">Non</option><option value="1">Oui (+12 EUR/pers/jour)</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Transfert aeroport</label>
+                        <select id="transfer"><option value="0">Non</option><option value="1">Aller (+20 EUR)</option><option value="2">Aller-retour (+40 EUR)</option></select>
+                    </div>
+                </div>
+
+                <div class="booking-summary" id="bookingSummary" style="display:none">
+                    <div class="summary-row"><span class="label" id="nightsLabel">0 nuit(s) x 0 EUR</span><span id="nightsPrice">0 EUR</span></div>
+                    <div class="summary-row" id="poolRow" style="display:none"><span class="label">Piscine chauffee</span><span id="poolPrice">0 EUR</span></div>
+                    <div class="summary-row" id="breakfastRow" style="display:none"><span class="label" id="breakfastLabel">Petit-dejeuner</span><span id="breakfastPrice">0 EUR</span></div>
+                    <div class="summary-row" id="transferRow" style="display:none"><span class="label">Transfert aeroport</span><span id="transferPrice">0 EUR</span></div>
+                    <div class="summary-row total"><span class="label">Total</span><span id="totalPrice">0 EUR</span></div>
+                    <div id="seasonNote" style="font-size:0.75rem;color:var(--text-mid);margin-top:0.5rem"></div>
+                </div>
+
+                <a id="bookBtn" href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank">
+                    <button class="btn-book">Reserver sur Airbnb</button>
+                </a>
+            </div>
+
+            <div class="booking-info reveal" data-delay="1">
+                <h4>Tarifs saisonniers</h4>
+                <div class="booking-info-block">
+                    <h5>Prix par nuit (riad entier)</h5>
+                    <div class="season-grid">
+                        <div class="season-row"><span class="name">Basse saison</span><span class="months">Juin — Sept.</span><span class="price">500 EUR</span></div>
+                        <div class="season-row"><span class="name">Moyenne saison</span><span class="months">Oct. Nov. Mars</span><span class="price">650 EUR</span></div>
+                        <div class="season-row"><span class="name">Haute saison</span><span class="months">Dec. — Mai</span><span class="price">761 EUR</span></div>
+                        <div class="season-row"><span class="name">Pic (Noel/Nouvel An)</span><span class="months">20 Dec. — 5 Jan.</span><span class="price">900 EUR</span></div>
+                    </div>
+                </div>
+
+                <div class="booking-info-block">
+                    <h5>Reservez sur</h5>
+                    <div class="platform-links">
+                        <a href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank" class="platform-link">
+                            <div><div class="pf-name" style="color:#FF5A5F">Airbnb</div><div class="pf-desc">4.94/5 — 18 avis — Superhote</div></div>
+                            <span class="pf-arrow">&#8594;</span>
+                        </a>
+                        <a href="https://www.booking.com/hotel/ma/casbah-amor-rooftop-with-pool-amp-air-conditioning.fr.html" target="_blank" class="platform-link">
+                            <div><div class="pf-name" style="color:#003580">Booking.com</div><div class="pf-desc">10/10 Exceptionnel</div></div>
+                            <span class="pf-arrow">&#8594;</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="booking-info-block">
+                    <h5>Conditions</h5>
+                    <p style="font-size:0.85rem;line-height:1.7;color:var(--text-mid)">Arrivee a partir de 15:00 — Depart avant 11:00<br>Annulation gratuite jusqu'a 7 jours avant l'arrivee<br>13 voyageurs maximum<br>Ne convient pas aux enfants ni aux bebes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section id="instagram">
+    <div style="text-align:center;padding:5rem 2rem 3rem">
+        <div class="section-label reveal" style="justify-content:center">Instagram</div>
+        <h2 class="section-title reveal" data-delay="1">Suivez-nous sur <em>@casbah_amor</em></h2>
+    </div>
+    <div class="insta-grid">
+        <a class="insta-item" href="https://www.instagram.com/casbah_amor/" target="_blank"><img src="images/airbnb-new/airbnb-01.jpeg" alt="Instagram 1" loading="lazy"></a>
+        <a class="insta-item" href="https://www.instagram.com/casbah_amor/" target="_blank"><img src="images/airbnb-new/airbnb-04.jpeg" alt="Instagram 2" loading="lazy"></a>
+        <a class="insta-item" href="https://www.instagram.com/casbah_amor/" target="_blank"><img src="images/airbnb-new/airbnb-30.jpeg" alt="Instagram 3" loading="lazy"></a>
+        <a class="insta-item" href="https://www.instagram.com/casbah_amor/" target="_blank"><img src="images/airbnb-new/airbnb-09.jpeg" alt="Instagram 4" loading="lazy"></a>
+        <a class="insta-item" href="https://www.instagram.com/casbah_amor/" target="_blank"><img src="images/airbnb-new/airbnb-42.jpeg" alt="Instagram 5" loading="lazy"></a>
+        <a class="insta-item" href="https://www.instagram.com/casbah_amor/" target="_blank"><img src="images/airbnb-new/airbnb-03.jpeg" alt="Instagram 6" loading="lazy"></a>
+    </div>
+    <div class="insta-banner">
+        <a href="https://www.instagram.com/casbah_amor/" target="_blank">@casbah_amor &#8594;</a>
+    </div>
+</section>
+
+<!-- MAP -->
+<section id="location">
+    <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3397.2!2d-7.99!3d31.63!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzHCsDM3JzQ4LjAiTiA3wrA1OSc0Mi4wIlc!5e0!3m2!1sfr!2sma!4v1" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="map-overlay reveal">
+            <h3>Emplacement ideal</h3>
+            <p>3 Rue Mohamed El Mellakh, 40000 Marrakech</p>
+            <div class="distance">&#128205; 10 min a pied de Jemaa el-Fna</div>
+            <div class="distance">&#128205; 10 min de La Mamounia</div>
+            <div class="distance">&#128205; Acces rapide a Gueliz et Hivernage</div>
+            <div class="distance">&#128205; 15 min de l'aeroport</div>
+            <p style="margin-top:1rem;font-size:0.8rem">Quartier central, sur et accessible a pied.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-top">
+        <div>
+            <div class="footer-brand">Casbah <span>Amor</span></div>
+            <p class="footer-tagline">Riad exclusif avec rooftop et piscine chauffee. Confort, design et charme marocain authentique a Marrakech.</p>
+        </div>
+        <div>
+            <h5>Navigation</h5>
+            <ul>
+                <li><a href="#riad">Le Riad</a></li>
+                <li><a href="#gallery">Galerie</a></li>
+                <li><a href="#rooms">Chambres</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#excursions">Excursions</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5>Reserver</h5>
+            <ul>
+                <li><a href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank">Airbnb</a></li>
+                <li><a href="https://www.booking.com/hotel/ma/casbah-amor-rooftop-with-pool-amp-air-conditioning.fr.html" target="_blank">Booking.com</a></li>
+                <li><a href="#booking">Simuler un prix</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5>Contact</h5>
+            <ul>
+                <li><a href="https://www.instagram.com/casbah_amor/" target="_blank">Instagram</a></li>
+                <li><a href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank">Contacter Mehdi</a></li>
+                <li>Marrakech, Maroc</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 Casbah Amor. Tous droits reserves. Superhote Mehdi — Riad privatise, Marrakech.
+    </div>
+</footer>
+
+<!-- FLOATING BAR -->
+<div class="float-bar" id="floatBar">
+    <div class="float-bar-info">
+        <div class="float-bar-price">A partir de 500 EUR <span>/ nuit</span></div>
+        <div class="float-bar-rating">&#9733; 4.94 (18 avis)</div>
+    </div>
+    <div class="float-bar-btns">
+        <a href="https://www.airbnb.fr/rooms/1478200670415261868" target="_blank"><button class="float-bar-btn fb-airbnb">Airbnb</button></a>
+        <a href="https://www.booking.com/hotel/ma/casbah-amor-rooftop-with-pool-amp-air-conditioning.fr.html" target="_blank"><button class="float-bar-btn fb-booking">Booking</button></a>
+        <a href="#booking"><button class="float-bar-btn fb-direct">Simuler</button></a>
+    </div>
+</div>
+
+<script>
+// ===== LOADER =====
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('hidden')},2000)});
+
+// ===== NAV SCROLL =====
+const nav=document.getElementById('nav');
+const floatBar=document.getElementById('floatBar');
+let lastScroll=0;
+window.addEventListener('scroll',()=>{
+    const y=window.scrollY;
+    if(y>80)nav.classList.add('scrolled');else nav.classList.remove('scrolled');
+    if(y>600)floatBar.classList.add('visible');else floatBar.classList.remove('visible');
+    lastScroll=y;
+});
+
+// ===== NAV TOGGLE =====
+document.getElementById('navToggle').addEventListener('click',()=>{
+    document.getElementById('navLinks').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a=>{a.addEventListener('click',()=>{document.getElementById('navLinks').classList.remove('open')})});
+
+// ===== REVEAL ON SCROLL =====
+const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}})
+},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale').forEach(el=>observer.observe(el));
+
+// ===== REVIEW BARS ANIMATION =====
+const barObserver=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){
+        e.target.querySelectorAll('.review-bar-fill').forEach(bar=>{bar.style.width=bar.dataset.width+'%'});
+        barObserver.unobserve(e.target);
+    }})
+},{threshold:0.3});
+document.querySelectorAll('.review-score').forEach(el=>barObserver.observe(el));
+
+// ===== LIGHTBOX =====
+const allPhotos=[
+    'images/airbnb-new/airbnb-04.jpeg','images/airbnb-new/airbnb-02.jpeg',
+    'images/airbnb-new/airbnb-09.jpeg','images/airbnb-new/airbnb-30.jpeg',
+    'images/airbnb-new/airbnb-01.jpeg','images/airbnb-new/airbnb-12.jpeg',
+    'images/airbnb-new/airbnb-42.jpeg','images/airbnb-new/airbnb-50.jpeg',
+    'images/airbnb-new/airbnb-08.jpeg','images/airbnb-new/airbnb-30.jpeg',
+    'images/airbnb-new/airbnb-40.jpeg','images/airbnb-new/airbnb-42.jpeg',
+    'images/airbnb-new/airbnb-50.jpeg','images/airbnb-new/airbnb-25.jpeg',
+    'images/airbnb-new/airbnb-55.jpeg'
+];
+let currentImg=0;
+function openLightbox(i){currentImg=i;document.getElementById('lightboxImg').src=allPhotos[i];document.getElementById('lightboxCounter').textContent=(i+1)+' / '+allPhotos.length;document.getElementById('lightbox').classList.add('active');document.body.style.overflow='hidden'}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('active');document.body.style.overflow=''}
+function navLightbox(d){currentImg=(currentImg+d+allPhotos.length)%allPhotos.length;document.getElementById('lightboxImg').src=allPhotos[currentImg];document.getElementById('lightboxCounter').textContent=(currentImg+1)+' / '+allPhotos.length}
+document.addEventListener('keydown',e=>{if(!document.getElementById('lightbox').classList.contains('active'))return;if(e.key==='Escape')closeLightbox();if(e.key==='ArrowLeft')navLightbox(-1);if(e.key==='ArrowRight')navLightbox(1)});
+
+// ===== BOOKING CALCULATOR =====
+const checkin=document.getElementById('checkin');
+const checkout=document.getElementById('checkout');
+const guests=document.getElementById('guests');
+const pool=document.getElementById('pool');
+const breakfast=document.getElementById('breakfast');
+const transfer=document.getElementById('transfer');
+
+function getSeasonPrice(date){
+    const m=date.getMonth()+1;const d=date.getDate();
+    if((m===12&&d>=20)||(m===1&&d<=5))return{price:900,name:'Pic (Noel/Nouvel An)'};
+    if(m>=12||m<=5)return{price:761,name:'Haute saison'};
+    if(m>=6&&m<=9)return{price:500,name:'Basse saison'};
+    return{price:650,name:'Moyenne saison'};
+}
+
+function calcBooking(){
+    if(!checkin.value||!checkout.value)return;
+    const ci=new Date(checkin.value);const co=new Date(checkout.value);
+    if(co<=ci)return;
+    const nights=Math.round((co-ci)/(1000*60*60*24));
+    let nightsTotal=0;let seasonName='';
+    const d=new Date(ci);
+    for(let i=0;i<nights;i++){const s=getSeasonPrice(d);nightsTotal+=s.price;if(i===0)seasonName=s.name;d.setDate(d.getDate()+1)}
+    const avgPrice=Math.round(nightsTotal/nights);
+    const poolTotal=parseInt(pool.value)*38*nights;
+    const bfTotal=parseInt(breakfast.value)*12*parseInt(guests.value)*nights;
+    const tfTotal=parseInt(transfer.value)*20;
+    const total=nightsTotal+poolTotal+bfTotal+tfTotal;
+
+    document.getElementById('bookingSummary').style.display='block';
+    document.getElementById('nightsLabel').textContent=nights+' nuit(s) x '+avgPrice+' EUR (moy.)';
+    document.getElementById('nightsPrice').textContent=nightsTotal+' EUR';
+
+    const poolRow=document.getElementById('poolRow');poolRow.style.display=poolTotal?'flex':'none';document.getElementById('poolPrice').textContent=poolTotal+' EUR';
+    const bfRow=document.getElementById('breakfastRow');bfRow.style.display=bfTotal?'flex':'none';document.getElementById('breakfastLabel').textContent='Petit-dej. ('+guests.value+' pers x '+nights+'j)';document.getElementById('breakfastPrice').textContent=bfTotal+' EUR';
+    const tfRow=document.getElementById('transferRow');tfRow.style.display=tfTotal?'flex':'none';document.getElementById('transferPrice').textContent=tfTotal+' EUR';
+    document.getElementById('totalPrice').textContent=total+' EUR';
+    document.getElementById('seasonNote').textContent='Saison detectee : '+seasonName;
+}
+[checkin,checkout,guests,pool,breakfast,transfer].forEach(el=>el.addEventListener('change',calcBooking));
+</script>
+</body>
+</html>
