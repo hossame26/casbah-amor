@@ -2,3 +2,4 @@ node_modules/
 semrush-data/.browser-data/
 semrush-data/screenshots/
 .DS_Store
+.vercel
